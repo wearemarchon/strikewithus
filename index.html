@@ -37,6 +37,32 @@
             margin-left: 200px;
         }
 
+        .map-overlay {
+            position: absolute;
+            bottom: 0;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: flex-start;
+            font-family: Arial, sans-serif;
+            overflow: auto;
+            z-index: 1;
+        }
+         .inset {
+            width: 230px;
+            height:150px;
+            border:1px solid #fff;
+            margin-left: 10px;
+            margin-right: 10px;
+            box-sizing: content-box;
+
+           
+        }
+
+        .inset .mapboxgl-control-container{
+            display: none;
+        }
+
         .sidebar a {
             display: block;
             color: black;
@@ -95,34 +121,22 @@
     <a id='day2Btn' onclick="setState(2)"><div>DAY 2</div></a>
     <a id='day3Btn' onclick="setState(3)"><div>DAY 3</div></a>
 </div>
-<div id='map' class='content'></div>
+<div id='map' class='content'>
+    <div class="map-overlay">
+        <div id='ak-inset' class="inset"></div>
+        <div id='hi-inset' class="inset"></div>
+        <div id='pr-inset' class="inset"></div>
+
+    </div>
+</div>
 
 <script src='https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js'></script>
+<script src="./constants.js" ></script>
+<script src="./inset-map.js"></script>
+
 <script>
 mapboxgl.accessToken = 'pk.eyJ1IjoiYXJpbmRhbTE5OTMiLCJhIjoiY2p0bnU2dmtoMHp4ZTN5cGxmZXJpa3BpdiJ9._9GLi1K1ERIMzwpzWSL-PA';
-var COLORS = {
-    '4/22/2020': {
-        background: '#b3b3b3',
-        us: '#ffffff',
-        pins: '#ed8c89'
-    },
-    '4/23/2020': {
-        background: '#dcbcc0',
-        us: '#f7f7f7',
-        pins: '#000000'
-    },
-    '4/24/2020': {
-        background: '#f7f7f7',
-        us: '#4d4d4d',
-        pins: '#e97d7f'
-    }
-};
-var urlParams = new URLSearchParams(window.location.search);
-var queryDay = parseInt(urlParams.get('day'));
-var referrer = urlParams.get('referral');
-var initialDay = queryDay > 0 && queryDay <=3 ? queryDay : null;
 
-var DEFAULT_DAY = '4/22/2020';
 var mapDiv = document.getElementById('map');
 
 var map = window.map = new mapboxgl.Map({
@@ -334,7 +348,15 @@ map.on('load', function() {
     });
 });
 
+function initInsets() {
+    const states = ['AK', 'HI', 'PR'];
+    states.forEach(function(state) {
+        let inset = new InsetMap(state, `${state.toLowerCase()}-inset`, bBoxes[state]);
+        inset.init();
+    })
+}
 
+initInsets();
 </script>
 </body>
 </html>
