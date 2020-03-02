@@ -16,6 +16,9 @@
             font-weight: 800;
             src: url("./GreveNarrow-800.otf") format("opentype");
         }
+        .hidden {
+            display: none;
+        }
         .mapboxgl-popup-tip {
             visibility: hidden;
         }
@@ -140,18 +143,27 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiYXJpbmRhbTE5OTMiLCJhIjoiY2p0bnU2dmtoMHp4ZTN5c
 
 var allMaps = [];
 
+function hideInsets() {
+    var insets = Array.from(document.getElementsByClassName('inset'));
+    insets.forEach(function(ele) {
+        ele.classList.add('hidden')
+    })
+}
+
+function showInsets() {
+    var insets = Array.from(document.getElementsByClassName('inset'));
+    insets.forEach(function (ele) {
+        ele.classList.remove('hidden')
+    })
+}
 
 function getMapColors(day) {
-
     if (!day) {
-
         return {
             background: COLORS['4/22/2020'].background,
             foreground: COLORS['4/22/2020'].us
         }
-    }
-
-    
+    }    
     return {
         background: COLORS[day].background,
         foreground: COLORS[day].us,
@@ -169,7 +181,6 @@ function setDay(dayIndex) {
     allMaps.forEach(function(thisMap) {
         let colors = getMapColors(day);
         if (thisMap.setPinFilter)  {
-
             thisMap.setPinFilter(day);
             thisMap.setColors(colors);
         }
@@ -194,6 +205,7 @@ function setState(dayIdx) {
             buttons[i].className = '';
         }
     }
+    showInsets();
     setDay(dayIndex);
     currentState = dayIdx;
 }

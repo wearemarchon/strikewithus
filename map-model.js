@@ -4,21 +4,21 @@ function MainMap(id, bounds) {
 }
 
 MainMap.prototype.setColors = function (colors) {
-     // Update background
-     this.map.setPaintProperty('background', 'background-color', colors.background);
-     // Update pins
-     // Update polygon color
-     this.map.setPaintProperty('us-polygon', 'fill-color', colors.foreground);
-     this.map.fitBounds(this.bounds, {
-         duration: 2000
-     });
+    // Update background
+    this.map.setPaintProperty('background', 'background-color', colors.background);
+    // Update pins
+    // Update polygon color
+    this.map.setPaintProperty('us-polygon', 'fill-color', colors.foreground);
+    this.map.fitBounds(this.bounds, {
+        duration: 2000
+    });
 }
 
 MainMap.prototype.setPinFilter = function (day) {
     if (!day) {
-        
+
         return this.map.setFilter('event-pins', null);
-        
+
     }
     this.map.setFilter('event-pins', ['==', ['get', 'eventDate'], day]);
 
@@ -99,6 +99,7 @@ MainMap.prototype.init = function () {
             mapboxgl: mapboxgl
         }), 'top-left'
     );
+
     // disable map rotation using right click + drag
     map.dragRotate.disable();
 
@@ -127,7 +128,7 @@ MainMap.prototype.init = function () {
         map.on('click', 'event-pins', function (e) {
             if (e.features.length > 0) {
                 var coordinates = e.features[0].geometry.coordinates.slice();
-
+                hideInsets();
                 map.flyTo({
                     center: coordinates,
                     zoom: 14

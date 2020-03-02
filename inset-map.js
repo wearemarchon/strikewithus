@@ -97,6 +97,7 @@ InsetMap.prototype.init = function () {
     let mainMap = this.mainMap;
     let bounds = this.bounds;
     this.map.on('click', function (e) {
+        hideInsets();
         mainMap.map.fitBounds(bounds, {
                     easeTo: {
                         duration: 0
