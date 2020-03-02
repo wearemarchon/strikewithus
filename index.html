@@ -132,36 +132,31 @@
 
 <script src='https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js'></script>
 <script src="./constants.js" ></script>
+<script src="./map-model.js"></script>
 <script src="./inset-map.js"></script>
 
 <script>
 mapboxgl.accessToken = 'pk.eyJ1IjoiYXJpbmRhbTE5OTMiLCJhIjoiY2p0bnU2dmtoMHp4ZTN5cGxmZXJpa3BpdiJ9._9GLi1K1ERIMzwpzWSL-PA';
 
-var mapDiv = document.getElementById('map');
+var allMaps = [];
 
-var map = window.map = new mapboxgl.Map({
-    container: 'map',
-    center: [-100.486052, 37.830348],
-    zoom: 2,
-    style: 'mapbox://styles/arindam1993/ck6i3d5o1007y1ipd0wyieobt'
-    // interactive: false
-});
-map.addControl(new mapboxgl.NavigationControl());
-map.addControl(
-    new MapboxGeocoder({
-        accessToken: mapboxgl.accessToken,
-        mapboxgl: mapboxgl
-    }), 'top-left'
-);
-// disable map rotation using right click + drag
-map.dragRotate.disable();
 
-// disable map rotation using touch rotation gesture
-map.touchZoomRotate.disableRotation();
-map.fitBounds(new mapboxgl.LngLatBounds(
-    new mapboxgl.LngLat(-127.119844, 25.393099),
-    new mapboxgl.LngLat( -64.920107, 50.095843)
-), { animate: false });
+function getMapColors(day) {
+
+    if (!day) {
+
+        return {
+            background: COLORS['4/22/2020'].background,
+            foreground: COLORS['4/22/2020'].us
+        }
+    }
+
+    
+    return {
+        background: COLORS[day].background,
+        foreground: COLORS[day].us,
+    }
+}
 
 function setDay(dayIndex) {
     var background,foreground;
@@ -171,25 +166,16 @@ function setDay(dayIndex) {
         '4/24/2020'
     ];
     var day = dayLookup[dayIndex];
-    if(day == null){
-        background = COLORS['4/22/2020'].background,
-        foreground = COLORS['4/22/2020'].us
-        map.setFilter('event-pins', undefined);
-    }else{
-        background = COLORS[day].background;
-        foreground = COLORS[day].us;
-        map.setFilter('event-pins', ['==', ['get', 'eventDate'], day]);
-    }
-    // Update background
-    map.setPaintProperty('background', 'background-color', background);
-    // Update pins
-    // Update polygon color
-    map.setPaintProperty('us-polygon', 'fill-color', foreground);
-    map.fitBounds(new mapboxgl.LngLatBounds(
-        new mapboxgl.LngLat(-127.119844, 25.393099),
-        new mapboxgl.LngLat( -64.920107, 50.095843)
-    ), { duration: 2000 });
+    allMaps.forEach(function(thisMap) {
+        let colors = getMapColors(day);
+        if (thisMap.setPinFilter)  {
+
+            thisMap.setPinFilter(day);
+            thisMap.setColors(colors);
+        }
+    })
 }
+
 var buttons = [
     document.getElementById('day1Btn'),
     document.getElementById('day2Btn'),
@@ -204,7 +190,7 @@ function setState(dayIdx) {
     for(var i = 0; i < buttons.length; i++){
         if(dayIndex == i){
             buttons[i].className = 'active';
-        }else{
+        } else {
             buttons[i].className = '';
         }
     }
@@ -240,123 +226,19 @@ function markerHtml(e){
     return '<a href='+link+'><strong>'+name.toUpperCase()+'</strong></a><br><i>'+formattedDate+'</i><br>'+locationName+'<br>'+locationAddress+'<br>'+locationState;
 }
 
-map.on('load', function() {
-    map.addSource('event-points', {
-        type: 'geojson',
-        data: 'https://usclimatestrike.s3.amazonaws.com/events.json'
-    });
-
-    map.loadImage('./pin_sdf.png', function(error, img){
-        var canvas = document.createElement('canvas');
-        var ctx = canvas.getContext('2d');
-
-        canvas.width = img.width;
-        canvas.height = img.height;
-        ctx.drawImage(img, 0, 0);
-        var data = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        var alpha = new Uint8ClampedArray(data.data);
-        for(var i = 3; i < alpha.length; i+=4){
-            alpha[i] = alpha[i-3];
-        }
-
-
-        map.addImage('pin', { width: data.width, height: data.height, data: alpha}, { sdf: true });
-        map.addLayer({
-            'id': 'event-pins',
-            'type': 'symbol',
-            'source': 'event-points',
-            'layout': {
-                'icon-allow-overlap': true,
-                'icon-anchor': 'bottom',
-                'icon-image': 'pin',
-                'icon-size': 0.5
-            },
-            'paint': {
-                'icon-color': ['to-color',
-                    [ 'case',
-                        ['boolean', [ 'feature-state', 'hover' ], false],
-                        '#82b7d1',
-                        [ 'match',
-                            ['get', 'eventDate'],
-                            '4/22/2020' , COLORS['4/22/2020'].pins,
-                            '4/23/2020' , COLORS['4/23/2020'].pins,
-                            '4/24/2020' , COLORS['4/24/2020'].pins,
-                            '#000000'
-                        ]
-                    ]
-                ],
-                'icon-halo-blur': 0,
-                'icon-halo-width': 2,
-                'icon-halo-color': '#000000'
-            }
-        });
-
-        setState(initialDay);
-    });
-
-
-    var hoveredPopup =  new mapboxgl.Popup({offset: 25, closeButton: true, closeOnClick: false});
-    map.on('click', 'event-pins', function(e) {
-        if (e.features.length > 0) {
-            var coordinates = e.features[0].geometry.coordinates.slice();
-
-            map.flyTo({
-                center: coordinates,
-                zoom: 14
-            });
-        }
-    });
-    // Nothing hovered initially
-    var hoveredPinId = null;
-    map.on('mousemove', 'event-pins', function(e) {
-        if (e.features.length > 0) {
-            var coordinates = e.features[0].geometry.coordinates.slice();
-            // un-hover previous
-            if (hoveredPinId) {
-                map.setFeatureState(
-                    { source: 'event-points', id: hoveredPinId },
-                    { hover: false }
-                );
-            }
-
-            // hover current
-            hoveredPinId = e.features[0].id;
-            map.setFeatureState(
-                { source: 'event-points', id: hoveredPinId },
-                { hover: true }
-            );
-
-            mapDiv.style.cursor = 'pointer';
-            hoveredPopup
-                .setLngLat(coordinates)
-                .setHTML(markerHtml(e))
-                .addTo(map);
-        }
-    });
-
-    // When the mouse leaves the state-fill layer, update the feature state of the
-    // previously hovered feature.
-    map.on('mouseleave', 'event-pins', function() {
-        if (hoveredPinId) {
-            map.setFeatureState(
-                { source: 'event-points', id: hoveredPinId },
-                { hover: false }
-            );
-            mapDiv.style.cursor = 'grab';
-        }
-        hoveredPinId = null;
-    });
-});
-
-function initInsets() {
+function drawMaps() {
     const states = ['AK', 'HI', 'PR'];
     states.forEach(function(state) {
         let inset = new InsetMap(state, `${state.toLowerCase()}-inset`, bBoxes[state]);
         inset.init();
+        allMaps.push(inset);
     })
+    let mainMap = new MainMap('map', [-127.119844, 25.393099, -64.920107, 50.095843])
+    mainMap.init();
+    allMaps.push(mainMap);
 }
 
-initInsets();
+    drawMaps();
 </script>
 </body>
 </html>
