@@ -1,7 +1,8 @@
-function InsetMap(state, id, bounds) {
+function InsetMap(state, id, bounds, mainMap) {
     this.state = state;
     this.mapId = id;
     this.bounds = bounds;
+    this.mainMap = mainMap;
 }
 
 InsetMap.prototype.setColors = MainMap.prototype.setColors;
@@ -93,4 +94,14 @@ InsetMap.prototype.init = function () {
 
 
     })
+    let mainMap = this.mainMap;
+    let bounds = this.bounds;
+    this.map.on('click', function (e) {
+        mainMap.map.fitBounds(bounds, {
+                    easeTo: {
+                        duration: 0
+                    },
+                })
+        
+    });
 }

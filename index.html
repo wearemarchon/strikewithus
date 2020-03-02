@@ -228,12 +228,12 @@ function markerHtml(e){
 
 function drawMaps() {
     const states = ['AK', 'HI', 'PR'];
+    let mainMap = new MainMap('map', [-127.119844, 25.393099, -64.920107, 50.095843])
     states.forEach(function(state) {
-        let inset = new InsetMap(state, `${state.toLowerCase()}-inset`, bBoxes[state]);
+        let inset = new InsetMap(state, `${state.toLowerCase()}-inset`, bBoxes[state], mainMap);
         inset.init();
         allMaps.push(inset);
     })
-    let mainMap = new MainMap('map', [-127.119844, 25.393099, -64.920107, 50.095843])
     mainMap.init();
     allMaps.push(mainMap);
 }
