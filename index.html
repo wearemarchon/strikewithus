@@ -16,6 +16,9 @@
             font-weight: 800;
             src: url("./GreveNarrow-800.otf") format("opentype");
         }
+        .hidden {
+            display: none;
+        }
         .mapboxgl-popup-tip {
             visibility: hidden;
         }
@@ -35,6 +38,34 @@
         }
         div.content {
             margin-left: 200px;
+        }
+
+        .map-overlay {
+            position: absolute;
+            bottom: 10px;
+            display: flex;
+            flex-flow: row wrap;
+            justify-content: space-between;
+            align-items: flex-start;
+            font-family: Arial, sans-serif;
+            overflow: auto;
+            z-index: 1;
+        }
+         .inset {
+            width: 230px;
+            flex: 1;
+            /* width: 25%; */
+            height:150px;
+            border:1px solid #fff;
+            margin-left: 10px;
+            margin-right: 10px;
+            box-sizing: content-box;
+
+           
+        }
+
+        .inset .mapboxgl-control-container{
+            display: none;
         }
 
         .sidebar a {
@@ -72,19 +103,23 @@
             .sidebar {
                 width: 100%;
                 position: relative;
-                height: 50px;
+                height: 8%;
             }
             .sidebar a {
                 float: left;
-                width: 32.8%;
-                height: 48px;
+                width: 33.3%;
+                height: 100%;
+                box-sizing: border-box;
                 border-left: 2px solid black;
                 border-bottom: 2px solid black;
                 border-right: none;
                 border-top: none;
                 font-size: 32px;
             }
-            div.content {margin-left: 0;}
+            div.content {
+                height: 92%!important;
+                margin-left: 0;
+                }
         }
     </style>
 </head>
@@ -95,59 +130,51 @@
     <a id='day2Btn' onclick="setState(2)"><div>DAY 2</div></a>
     <a id='day3Btn' onclick="setState(3)"><div>DAY 3</div></a>
 </div>
-<div id='map' class='content'></div>
+<div id='map' class='content'>
+    <div class="map-overlay">
+        <div id='ak-inset' class="inset"></div>
+        <div id='hi-inset' class="inset"></div>
+        <div id='pr-inset' class="inset"></div>
+
+    </div>
+</div>
 
 <script src='https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js'></script>
+<script src="./constants.js" ></script>
+<script src="./map-model.js"></script>
+<script src="./inset-map.js"></script>
+
 <script>
 mapboxgl.accessToken = 'pk.eyJ1IjoiYXJpbmRhbTE5OTMiLCJhIjoiY2p0bnU2dmtoMHp4ZTN5cGxmZXJpa3BpdiJ9._9GLi1K1ERIMzwpzWSL-PA';
-var COLORS = {
-    '4/22/2020': {
-        background: '#b3b3b3',
-        us: '#ffffff',
-        pins: '#ed8c89'
-    },
-    '4/23/2020': {
-        background: '#dcbcc0',
-        us: '#f7f7f7',
-        pins: '#000000'
-    },
-    '4/24/2020': {
-        background: '#f7f7f7',
-        us: '#4d4d4d',
-        pins: '#e97d7f'
+
+var allMaps = [];
+
+function hideInsets() {
+    var insets = Array.from(document.getElementsByClassName('inset'));
+    insets.forEach(function(ele) {
+        ele.classList.add('hidden')
+    })
+}
+
+function showInsets() {
+    var insets = Array.from(document.getElementsByClassName('inset'));
+    insets.forEach(function (ele) {
+        ele.classList.remove('hidden')
+    })
+}
+
+function getMapColors(day) {
+    if (!day) {
+        return {
+            background: COLORS['4/22/2020'].background,
+            foreground: COLORS['4/22/2020'].us
+        }
+    }    
+    return {
+        background: COLORS[day].background,
+        foreground: COLORS[day].us,
     }
-};
-var urlParams = new URLSearchParams(window.location.search);
-var queryDay = parseInt(urlParams.get('day'));
-var referrer = urlParams.get('referral');
-var initialDay = queryDay > 0 && queryDay <=3 ? queryDay : null;
-
-var DEFAULT_DAY = '4/22/2020';
-var mapDiv = document.getElementById('map');
-
-var map = window.map = new mapboxgl.Map({
-    container: 'map',
-    center: [-100.486052, 37.830348],
-    zoom: 2,
-    style: 'mapbox://styles/arindam1993/ck6i3d5o1007y1ipd0wyieobt'
-    // interactive: false
-});
-map.addControl(new mapboxgl.NavigationControl());
-map.addControl(
-    new MapboxGeocoder({
-        accessToken: mapboxgl.accessToken,
-        mapboxgl: mapboxgl
-    }), 'top-left'
-);
-// disable map rotation using right click + drag
-map.dragRotate.disable();
-
-// disable map rotation using touch rotation gesture
-map.touchZoomRotate.disableRotation();
-map.fitBounds(new mapboxgl.LngLatBounds(
-    new mapboxgl.LngLat(-127.119844, 25.393099),
-    new mapboxgl.LngLat( -64.920107, 50.095843)
-), { animate: false });
+}
 
 function setDay(dayIndex) {
     var background,foreground;
@@ -157,25 +184,15 @@ function setDay(dayIndex) {
         '4/24/2020'
     ];
     var day = dayLookup[dayIndex];
-    if(day == null){
-        background = COLORS['4/22/2020'].background,
-        foreground = COLORS['4/22/2020'].us
-        map.setFilter('event-pins', undefined);
-    }else{
-        background = COLORS[day].background;
-        foreground = COLORS[day].us;
-        map.setFilter('event-pins', ['==', ['get', 'eventDate'], day]);
-    }
-    // Update background
-    map.setPaintProperty('background', 'background-color', background);
-    // Update pins
-    // Update polygon color
-    map.setPaintProperty('us-polygon', 'fill-color', foreground);
-    map.fitBounds(new mapboxgl.LngLatBounds(
-        new mapboxgl.LngLat(-127.119844, 25.393099),
-        new mapboxgl.LngLat( -64.920107, 50.095843)
-    ), { duration: 2000 });
+    allMaps.forEach(function(thisMap) {
+        let colors = getMapColors(day);
+        if (thisMap.setPinFilter)  {
+            thisMap.setPinFilter(day);
+            thisMap.setColors(colors);
+        }
+    })
 }
+
 var buttons = [
     document.getElementById('day1Btn'),
     document.getElementById('day2Btn'),
@@ -190,10 +207,11 @@ function setState(dayIdx) {
     for(var i = 0; i < buttons.length; i++){
         if(dayIndex == i){
             buttons[i].className = 'active';
-        }else{
+        } else {
             buttons[i].className = '';
         }
     }
+    showInsets();
     setDay(dayIndex);
     currentState = dayIdx;
 }
@@ -226,115 +244,19 @@ function markerHtml(e){
     return '<a href='+link+'><strong>'+name.toUpperCase()+'</strong></a><br><i>'+formattedDate+'</i><br>'+locationName+'<br>'+locationAddress+'<br>'+locationState;
 }
 
-map.on('load', function() {
-    map.addSource('event-points', {
-        type: 'geojson',
-        data: 'https://usclimatestrike.s3.amazonaws.com/events.json'
-    });
+function drawMaps() {
+    const states = ['AK', 'HI', 'PR'];
+    let mainMap = new MainMap('map', [-127.119844, 25.393099, -64.920107, 50.095843])
+    states.forEach(function(state) {
+        let inset = new InsetMap(state, `${state.toLowerCase()}-inset`, bBoxes[state], mainMap);
+        inset.init();
+        allMaps.push(inset);
+    })
+    mainMap.init();
+    allMaps.push(mainMap);
+}
 
-    map.loadImage('./pin_sdf.png', function(error, img){
-        var canvas = document.createElement('canvas');
-        var ctx = canvas.getContext('2d');
-
-        canvas.width = img.width;
-        canvas.height = img.height;
-        ctx.drawImage(img, 0, 0);
-        var data = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        var alpha = new Uint8ClampedArray(data.data);
-        for(var i = 3; i < alpha.length; i+=4){
-            alpha[i] = alpha[i-3];
-        }
-
-
-        map.addImage('pin', { width: data.width, height: data.height, data: alpha}, { sdf: true });
-        map.addLayer({
-            'id': 'event-pins',
-            'type': 'symbol',
-            'source': 'event-points',
-            'layout': {
-                'icon-allow-overlap': true,
-                'icon-anchor': 'bottom',
-                'icon-image': 'pin',
-                'icon-size': 0.5
-            },
-            'paint': {
-                'icon-color': ['to-color',
-                    [ 'case',
-                        ['boolean', [ 'feature-state', 'hover' ], false],
-                        '#82b7d1',
-                        [ 'match',
-                            ['get', 'eventDate'],
-                            '4/22/2020' , COLORS['4/22/2020'].pins,
-                            '4/23/2020' , COLORS['4/23/2020'].pins,
-                            '4/24/2020' , COLORS['4/24/2020'].pins,
-                            '#000000'
-                        ]
-                    ]
-                ],
-                'icon-halo-blur': 0,
-                'icon-halo-width': 2,
-                'icon-halo-color': '#000000'
-            }
-        });
-
-        setState(initialDay);
-    });
-
-
-    var hoveredPopup =  new mapboxgl.Popup({offset: 25, closeButton: true, closeOnClick: false});
-    map.on('click', 'event-pins', function(e) {
-        if (e.features.length > 0) {
-            var coordinates = e.features[0].geometry.coordinates.slice();
-
-            map.flyTo({
-                center: coordinates,
-                zoom: 14
-            });
-        }
-    });
-    // Nothing hovered initially
-    var hoveredPinId = null;
-    map.on('mousemove', 'event-pins', function(e) {
-        if (e.features.length > 0) {
-            var coordinates = e.features[0].geometry.coordinates.slice();
-            // un-hover previous
-            if (hoveredPinId) {
-                map.setFeatureState(
-                    { source: 'event-points', id: hoveredPinId },
-                    { hover: false }
-                );
-            }
-
-            // hover current
-            hoveredPinId = e.features[0].id;
-            map.setFeatureState(
-                { source: 'event-points', id: hoveredPinId },
-                { hover: true }
-            );
-
-            mapDiv.style.cursor = 'pointer';
-            hoveredPopup
-                .setLngLat(coordinates)
-                .setHTML(markerHtml(e))
-                .addTo(map);
-        }
-    });
-
-    // When the mouse leaves the state-fill layer, update the feature state of the
-    // previously hovered feature.
-    map.on('mouseleave', 'event-pins', function() {
-        if (hoveredPinId) {
-            map.setFeatureState(
-                { source: 'event-points', id: hoveredPinId },
-                { hover: false }
-            );
-            mapDiv.style.cursor = 'grab';
-        }
-        hoveredPinId = null;
-    });
-});
-
-
+    drawMaps();
 </script>
 </body>
 </html>
