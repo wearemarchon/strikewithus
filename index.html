@@ -42,9 +42,9 @@
 
         .map-overlay {
             position: absolute;
-            bottom: 0;
+            bottom: 10px;
             display: flex;
-            flex-direction: row;
+            flex-flow: row wrap;
             justify-content: space-between;
             align-items: flex-start;
             font-family: Arial, sans-serif;
@@ -53,6 +53,8 @@
         }
          .inset {
             width: 230px;
+            flex: 1;
+            /* width: 25%; */
             height:150px;
             border:1px solid #fff;
             margin-left: 10px;
@@ -101,19 +103,23 @@
             .sidebar {
                 width: 100%;
                 position: relative;
-                height: 50px;
+                height: 8%;
             }
             .sidebar a {
                 float: left;
-                width: 32.8%;
-                height: 48px;
+                width: 33.3%;
+                height: 100%;
+                box-sizing: border-box;
                 border-left: 2px solid black;
                 border-bottom: 2px solid black;
                 border-right: none;
                 border-top: none;
                 font-size: 32px;
             }
-            div.content {margin-left: 0;}
+            div.content {
+                height: 92%!important;
+                margin-left: 0;
+                }
         }
     </style>
 </head>
