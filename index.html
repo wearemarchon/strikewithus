@@ -41,6 +41,12 @@
         div.content {
             margin-left: 200px;
         }
+        .filters {
+            position: absolute;
+            top: 62px;
+            z-index: 3000;
+            left: 14px;
+        }
 
         .map-overlay {
             position: absolute;
@@ -61,8 +67,6 @@
             margin-left: 10px;
             margin-right: 10px;
             box-sizing: content-box;
-
-
         }
 
         .inset .mapboxgl-control-container{
@@ -156,6 +160,17 @@
     <a id='day3Btn' onclick="setState(3)"><div>DAY 3</div></a>
 </div>
 <div id='map' class='content'>
+    <div class="filters">
+        FILTER BY:
+        <label>
+            <input type="checkbox" />
+            LABOR EVENTS
+        </label>
+        <label>
+            <input type="checkbox" />
+            FAITH EVENTS
+        </label>
+    </div>
     <div class="map-overlay">
         <div id='ak-inset' class="inset"></div>
         <div id='hi-inset' class="inset"></div>
