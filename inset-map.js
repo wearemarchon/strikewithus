@@ -66,7 +66,7 @@ InsetMap.prototype.addPointsLayer = function () {
 }
 
 InsetMap.prototype.init = function () {
-    var styleUrl = 'mapbox://styles/arindam1993/ck6i3d5o1007y1ipd0wyieobt'
+    var styleUrl = 'mapbox://styles/wearemarchon/ck7fiejvh0j6d1jo2wzsahijn'
 
     this.map = new mapboxgl.Map({
         container: this.mapId,
@@ -103,6 +103,6 @@ InsetMap.prototype.init = function () {
                         duration: 0
                     },
                 })
-        
+
     });
 }

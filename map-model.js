@@ -9,6 +9,7 @@ MainMap.prototype.setColors = function (colors) {
     // Update pins
     // Update polygon color
     this.map.setPaintProperty('us-polygon', 'fill-color', colors.foreground);
+    this.map.setPaintProperty('us-territories', 'fill-color', colors.foreground);
     this.map.fitBounds(this.bounds, {
         duration: 2000
     });
