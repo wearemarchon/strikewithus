@@ -88,7 +88,7 @@ MainMap.prototype.init = function () {
         container: this.mapId,
         center: [-100.486052, 37.830348],
         zoom: 2,
-        style: 'mapbox://styles/arindam1993/ck6i3d5o1007y1ipd0wyieobt'
+        style: 'mapbox://styles/wearemarchon/ck7fiejvh0j6d1jo2wzsahijn'
         // interactive: false
     });
     this.map = map;
