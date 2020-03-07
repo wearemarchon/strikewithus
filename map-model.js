@@ -24,36 +24,35 @@ MainMap.getDayFilter = function() {
     ]; // currentState is 1 indexed not 0 indexed
     
     var day = currentState ? dayLookupIndexed[currentState] : null;
-    console.log('day', day)
     if (!day) {
         return null;
     }
     return ['==', ['get', 'eventDate'], day];
 }
 
-MainMap.prototype.setTypeFilters = function(filters) {
-    var dayFilter = MainMap.getDayFilter();
-    let bothOn = true;
-    let filterBy;
-    Object.keys(filters).forEach(function(key) {
-        if (!filters[key]) {
-            bothOn = false;
-        }
-        else {
-            filterBy = key;
-        }
-    })
-    if (bothOn) {
-        return this.map.setFilter('event-pins', dayFilter);
+MainMap.getTypeFilter = function() {
+    if (!filterBy) {
+        return null;
     }
-    if (filterBy) {
-        var filterArray = ['==', ['get', 'host_type'], filterBy];
-        if (dayFilter) {
-            filterArray = ['all', filterArray, dayFilter];
-        }
-        return this.map.setFilter('event-pins', filterArray);
-    }
+    return ['==', ['get', 'host_type'], filterBy]
 
+}
+
+MainMap.prototype.setTypeFilters = function () {
+    var dayFilter = MainMap.getDayFilter();
+    if (!dayFilter && !filterBy) {
+        return this.map.setFilter('event-pins', null);
+    }
+    var filterArray = [];
+    var filterByType = MainMap.getTypeFilter();
+    if (dayFilter && filterBy) {
+        filterArray = ['all', filterByType, dayFilter];
+    } else if (filterBy) {
+        filterArray = filterByType;
+    } else {
+        filterArray = dayFilter;
+    }
+    return this.map.setFilter('event-pins', filterArray);
 }
 
 MainMap.prototype.addPointsLayer = function () {

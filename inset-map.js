@@ -7,29 +7,20 @@ function InsetMap(state, id, bounds, mainMap) {
 
 InsetMap.prototype.setColors = MainMap.prototype.setColors;
 
-InsetMap.prototype.setTypeFilters = function() {
+InsetMap.prototype.setTypeFilters = function(filterBy) {
     var stateFilter = ['==', ['get', 'state'], this.state];
     var filterArray = ['all', stateFilter];
     var dayFilter = MainMap.getDayFilter();
-    let bothOn = true;
-    let filterBy;
-    Object.keys(filters).forEach(function (key) {
-        if (!filters[key]) {
-            bothOn = false;
-        } else {
-            filterBy = key;
-        }
-    })
+    var filterByType = MainMap.getTypeFilter();
+
     if (dayFilter) {
         filterArray.push(dayFilter);
     }
-    if (bothOn) {
-        return this.map.setFilter('event-pins', filterArray);
+
+    if (filterByType) {
+        filterArray.push(filterByType);
     }
-    if (filterBy) {
-        filterArray.push(['==', ['get', 'host_type'], filterBy]);
-        return this.map.setFilter('event-pins', filterArray);
-    }
+    return this.map.setFilter('event-pins', filterArray);
 };
 
 InsetMap.prototype.addPointsLayer = function () {

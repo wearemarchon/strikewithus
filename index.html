@@ -226,8 +226,8 @@
 mapboxgl.accessToken = 'pk.eyJ1Ijoid2VhcmVtYXJjaG9uIiwiYSI6ImNqdTFscXo3ZzAwYTE0ZWxzMWhrNnVtNHIifQ.ql7OysgSLnCazbiXZt8NFA';
 
 var allMaps = [];
-var initialFilters =  { 'labor': true, 'faith': true };
-var filters = Object.assign({}, initialFilters)
+var filterBy = null;
+
 function hideInsets() {
     var insets = Array.from(document.getElementsByClassName('inset'));
     insets.forEach(function(ele) {
@@ -266,7 +266,7 @@ function setDay(dayIndex) {
     allMaps.forEach(function(thisMap) {
         let colors = getMapColors(day);
         if (thisMap.setTypeFilters) {
-            thisMap.setTypeFilters(filters);
+            thisMap.setTypeFilters(filterBy);
             thisMap.setColors(colors);
         }
     })
@@ -302,15 +302,12 @@ function toggleFilter(type, ele) {
     })
     ele.classList.add('active');
 
-    if (type === 'all') {
-        filters = Object.assign({}, initialFilters)
-    } else {
-        filters[type] = !filters[type];;
-    }
+    filterBy = type === 'all' ? null : type;
+    
     
     allMaps.forEach(function (thisMap) {
         if (thisMap.setTypeFilters) {
-            thisMap.setTypeFilters(filters);
+            thisMap.setTypeFilters();
         }
     })
 }
