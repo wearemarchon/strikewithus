@@ -37,6 +37,7 @@
             overflow: auto;
             border: 2px solid black;
             box-sizing: border-box;
+            
         }
         div.content {
             margin-left: 200px;
@@ -47,11 +48,15 @@
             z-index: 3000;
             left: 14px;
             display: flex;
-            flex-flow: column;
+            justify-content: space-evenly;
+            width: 238px;
+            padding: 2px;
+            background: #ffffffbd;
+            border-radius: 5px;
         }
         .filters .checkbox-container {
             position: relative;
-            flex: 1;
+            margin: auto
         }
         .filters label {
             margin-left: calc(1em + 4px);
@@ -67,7 +72,7 @@
             border: 1px solid #000000;
             position: absolute;
             left: 0;
-            top: 0;
+            top: 2px;
             background-color: transparent;
         }
 
@@ -99,6 +104,9 @@
 
         .inset .mapboxgl-control-container{
             display: none;
+        }
+        .mapboxgl-popup {
+            z-index: 3000;
         }
         .sidebar a {
             display: block;
@@ -189,7 +197,8 @@
 </div>
 <div id='map' class='content'>
     <div class="filters">
-        FILTER BY:
+        <div class="checkbox-container">FILTER BY:</div>
+        
         <div class="checkbox-container"> 
             <input id="all" name="type-filter" class="type-filter" type="radio" hidden checked />
             <label for="all" class="filter-label active" onclick="toggleFilter('all', this)">
@@ -199,13 +208,13 @@
         <div class="checkbox-container">
             <input id="labor" name="type-filter" class="type-filter" type="radio" hidden  />
             <label for="labor" class="filter-label" onclick="toggleFilter('labor', this)">
-                LABOR EVENTS
+                LABOR
             </label>
         </div> 
         <div class="checkbox-container">
             <input id="faith" name="type-filter" class="type-filter" type="radio" hidden  />
             <label for="faith" class="filter-label" onclick="toggleFilter('faith', this)">
-                FAITH EVENTS
+                FAITH
             </label>
         </div>
     </div>
