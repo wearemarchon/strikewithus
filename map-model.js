@@ -40,6 +40,7 @@ MainMap.getTypeFilter = function() {
 
 MainMap.prototype.setTypeFilters = function () {
     var dayFilter = MainMap.getDayFilter();
+    this.hoveredPopup.remove(); //close any open popup
     if (!dayFilter && !filterBy) {
         return this.map.setFilter('event-pins', null);
     }
@@ -151,7 +152,7 @@ MainMap.prototype.init = function () {
         });
 
         me.addPointsLayer();
-        var hoveredPopup = new mapboxgl.Popup({
+        me.hoveredPopup = new mapboxgl.Popup({
             offset: 25,
             closeButton: true,
             closeOnClick: false
@@ -193,7 +194,7 @@ MainMap.prototype.init = function () {
                 });
 
                 mapDiv.style.cursor = 'pointer';
-                hoveredPopup
+                me.hoveredPopup
                     .setLngLat(coordinates)
                     .setHTML(markerHtml(e))
                     .addTo(map);
@@ -213,6 +214,7 @@ MainMap.prototype.init = function () {
                 mapDiv.style.cursor = 'grab';
             }
             hoveredPinId = null;
+            me.hoveredPopup.remove();
         });
     })
 }
