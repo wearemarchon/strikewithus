@@ -278,7 +278,7 @@ function setDay(dayIndex) {
     allMaps.forEach(function(thisMap) {
         let colors = getMapColors(day);
         if (thisMap.setTypeFilters) {
-            thisMap.setTypeFilters(filterBy);
+            thisMap.setTypeFilters();
             thisMap.setColors(colors);
         }
     })
