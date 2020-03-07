@@ -15,17 +15,28 @@ MainMap.prototype.setColors = function (colors) {
     });
 }
 
-MainMap.prototype.setPinFilter = function (day) {
+MainMap.getDayFilter = function(day) {
+    var dayLookupIndexed = [
+        null,
+        '4/22/2020',
+        '4/23/2020',
+        '4/24/2020'
+    ]; // currentState is 1 indexed not 0 indexed
+    var day = day || dayLookupIndexed[currentState];
     if (!day) {
-
-        return this.map.setFilter('event-pins', null);
-
+        return null;
     }
-    this.map.setFilter('event-pins', ['==', ['get', 'eventDate'], day]);
+    return ['==', ['get', 'eventDate'], day];
+}
 
+MainMap.prototype.setPinFilter = function (day) {
+    
+    var dayFilter = day ? MainMap.getDayFilter(day) : null;
+    this.map.setFilter('event-pins', dayFilter);
 }
 
 MainMap.prototype.setTypeFilters = function(filters) {
+    var dayFilter = MainMap.getDayFilter();
     let bothOn = true;
     let filterBy;
     Object.keys(filters).forEach(function(key) {
@@ -37,10 +48,14 @@ MainMap.prototype.setTypeFilters = function(filters) {
         }
     })
     if (bothOn) {
-        return this.map.setFilter('event-pins', null);
+        return this.map.setFilter('event-pins', dayFilter);
     }
     if (filterBy) {
-        return this.map.setFilter('event-pins', ['==', ['get', 'host_type'], filterBy]);
+        var filterArray = ['==', ['get', 'host_type'], filterBy];
+        if (dayFilter) {
+            filterArray = ['all', filterArray, dayFilter];
+        }
+        return this.map.setFilter('event-pins', filterArray);
     }
 
 }

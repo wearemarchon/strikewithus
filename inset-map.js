@@ -6,8 +6,39 @@ function InsetMap(state, id, bounds, mainMap) {
 }
 
 InsetMap.prototype.setColors = MainMap.prototype.setColors;
-InsetMap.prototype.setPinFilter = MainMap.prototype.setPinFilter;
-InsetMap.prototype.setTypeFilters = MainMap.prototype.setTypeFilters;
+
+InsetMap.prototype.setTypeFilters = function() {
+    var stateFilter = ['==', ['get', 'state'], this.state];
+    var filterArray = ['all', stateFilter];
+    var dayFilter = MainMap.getDayFilter();
+    let bothOn = true;
+    let filterBy;
+    Object.keys(filters).forEach(function (key) {
+        if (!filters[key]) {
+            bothOn = false;
+        } else {
+            filterBy = key;
+        }
+    })
+    if (dayFilter) {
+        filterArray.push(dayFilter);
+    }
+    if (bothOn) {
+        return this.map.setFilter('event-pins', filterArray);
+    }
+    if (filterBy) {
+        filterArray.push(['==', ['get', 'host_type'], filterBy]);
+        return this.map.setFilter('event-pins', filterArray);
+    }
+};
+
+InsetMap.prototype.setPinFilter = function (day) {
+        var stateFilter = ['==', ['get', 'state'], this.state]
+        if (!day) {
+            return this.map.setFilter('event-pins', stateFilter);
+        }
+        this.map.setFilter('event-pins', ['all', stateFilter, ['==', ['get', 'eventDate'], day]]);
+}
 
 InsetMap.prototype.addPointsLayer = function () {
     let thisInset = this;
@@ -62,6 +93,7 @@ InsetMap.prototype.addPointsLayer = function () {
                 'icon-halo-color': '#000000'
             }
         });
+        thisInset.map.setFilter('event-pins', ['==', ['get', 'state'], thisInset.state]);
 
     })
 }
