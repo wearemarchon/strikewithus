@@ -46,6 +46,34 @@
             top: 62px;
             z-index: 3000;
             left: 14px;
+            display: flex;
+            flex-flow: column;
+        }
+        .filters .checkbox-container {
+            position: relative;
+            flex: 1;
+        }
+        .filters label {
+            margin-left: calc(1em + 4px);
+        }
+        .filters label::before {
+            content: '';
+            border-radius: 100%;
+            width: calc(1em + 2px);
+            height: calc(1em + 2px);
+            display: block;
+            box-sizing: border-box;
+            border-radius: 0;
+            border: 1px solid #000000;
+            position: absolute;
+            left: 0;
+            top: 0;
+            background-color: transparent;
+        }
+
+        .filters label.active::before {
+            background-color: #000000;
+
         }
 
         .map-overlay {
@@ -162,18 +190,24 @@
 <div id='map' class='content'>
     <div class="filters">
         FILTER BY:
-        <input id="all" name="type-fitler" class="type-filter" type="radio" checked />
-        <label for="all" onclick="toggleFilter('all')">
-            All
-        </label>
-        <input id="labor" name="type-fitler" class="type-filter" type="radio"  />
-        <label for="labor" onclick="toggleFilter('labor')">
-            LABOR EVENTS
-        </label>
-        <input id="faith" name="type-fitler" class="type-filter" type="radio"  />
-        <label for="faith" onclick="toggleFilter('faith')">
-            FAITH EVENTS
-        </label>
+        <div class="checkbox-container"> 
+            <input id="all" name="type-filter" class="type-filter" type="radio" hidden checked />
+            <label for="all" class="filter-label active" onclick="toggleFilter('all', this)">
+                All
+            </label>
+        </div>
+        <div class="checkbox-container">
+            <input id="labor" name="type-filter" class="type-filter" type="radio" hidden  />
+            <label for="labor" class="filter-label" onclick="toggleFilter('labor', this)">
+                LABOR EVENTS
+            </label>
+        </div> 
+        <div class="checkbox-container">
+            <input id="faith" name="type-filter" class="type-filter" type="radio" hidden  />
+            <label for="faith" class="filter-label" onclick="toggleFilter('faith', this)">
+                FAITH EVENTS
+            </label>
+        </div>
     </div>
     <div class="map-overlay">
         <div id='ak-inset' class="inset"></div>
@@ -261,7 +295,13 @@ function setState(dayIdx) {
     currentState = dayIdx;
 }
 
-function toggleFilter(type) {
+function toggleFilter(type, ele) {
+    Array.from(document.getElementsByClassName('filter-label')).forEach(function(label) {
+        console.log(label)
+        label.classList.remove('active');
+    })
+    ele.classList.add('active');
+
     if (type === 'all') {
         filters = Object.assign({}, initialFilters)
     } else {
