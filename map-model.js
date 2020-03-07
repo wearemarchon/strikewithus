@@ -25,6 +25,26 @@ MainMap.prototype.setPinFilter = function (day) {
 
 }
 
+MainMap.prototype.setTypeFilters = function(filters) {
+    let bothOn = true;
+    let filterBy;
+    Object.keys(filters).forEach(function(key) {
+        if (!filters[key]) {
+            bothOn = false;
+        }
+        else {
+            filterBy = key;
+        }
+    })
+    if (bothOn) {
+        return this.map.setFilter('event-pins', null);
+    }
+    if (filterBy) {
+        return this.map.setFilter('event-pins', ['==', ['get', 'host_type'], filterBy]);
+    }
+
+}
+
 MainMap.prototype.addPointsLayer = function () {
     let mainMap = this;
     mainMap.map.loadImage('./pin_sdf.png', function (err, img) {

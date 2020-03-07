@@ -162,12 +162,16 @@
 <div id='map' class='content'>
     <div class="filters">
         FILTER BY:
-        <label>
-            <input type="checkbox" />
+        <input id="all" name="type-fitler" class="type-filter" type="radio" checked />
+        <label for="all" onclick="toggleFilter('all')">
+            All
+        </label>
+        <input id="labor" name="type-fitler" class="type-filter" type="radio"  />
+        <label for="labor" onclick="toggleFilter('labor')">
             LABOR EVENTS
         </label>
-        <label>
-            <input type="checkbox" />
+        <input id="faith" name="type-fitler" class="type-filter" type="radio"  />
+        <label for="faith" onclick="toggleFilter('faith')">
             FAITH EVENTS
         </label>
     </div>
@@ -188,7 +192,8 @@
 mapboxgl.accessToken = 'pk.eyJ1Ijoid2VhcmVtYXJjaG9uIiwiYSI6ImNqdTFscXo3ZzAwYTE0ZWxzMWhrNnVtNHIifQ.ql7OysgSLnCazbiXZt8NFA';
 
 var allMaps = [];
-
+var initialFilters =  { 'labor': true, 'faith': true };
+var filters = Object.assign({}, initialFilters)
 function hideInsets() {
     var insets = Array.from(document.getElementsByClassName('inset'));
     insets.forEach(function(ele) {
@@ -254,6 +259,20 @@ function setState(dayIdx) {
     showInsets();
     setDay(dayIndex);
     currentState = dayIdx;
+}
+
+function toggleFilter(type) {
+    if (type === 'all') {
+        filters = Object.assign({}, initialFilters)
+    } else {
+        filters[type] = !filters[type];;
+    }
+    
+    allMaps.forEach(function (thisMap) {
+        if (thisMap.setTypeFilters) {
+            thisMap.setTypeFilters(filters);
+        }
+    })
 }
 
 function markerHtml(e){

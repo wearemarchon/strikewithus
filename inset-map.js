@@ -7,6 +7,7 @@ function InsetMap(state, id, bounds, mainMap) {
 
 InsetMap.prototype.setColors = MainMap.prototype.setColors;
 InsetMap.prototype.setPinFilter = MainMap.prototype.setPinFilter;
+InsetMap.prototype.setTypeFilters = MainMap.prototype.setTypeFilters;
 
 InsetMap.prototype.addPointsLayer = function () {
     let thisInset = this;
