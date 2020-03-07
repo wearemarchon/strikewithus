@@ -278,6 +278,7 @@ var buttons = [
     document.getElementById('day3Btn')
 ];
 var currentState = null;
+
 function setState(dayIdx) {
     if(dayIdx === currentState){
         dayIdx = null;
@@ -297,7 +298,6 @@ function setState(dayIdx) {
 
 function toggleFilter(type, ele) {
     Array.from(document.getElementsByClassName('filter-label')).forEach(function(label) {
-        console.log(label)
         label.classList.remove('active');
     })
     ele.classList.add('active');
