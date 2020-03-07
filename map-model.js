@@ -15,24 +15,20 @@ MainMap.prototype.setColors = function (colors) {
     });
 }
 
-MainMap.getDayFilter = function(day) {
+MainMap.getDayFilter = function() {
     var dayLookupIndexed = [
         null,
         '4/22/2020',
         '4/23/2020',
         '4/24/2020'
     ]; // currentState is 1 indexed not 0 indexed
-    var day = day || dayLookupIndexed[currentState];
+    
+    var day = currentState ? dayLookupIndexed[currentState] : null;
+    console.log('day', day)
     if (!day) {
         return null;
     }
     return ['==', ['get', 'eventDate'], day];
-}
-
-MainMap.prototype.setPinFilter = function (day) {
-    
-    var dayFilter = day ? MainMap.getDayFilter(day) : null;
-    this.map.setFilter('event-pins', dayFilter);
 }
 
 MainMap.prototype.setTypeFilters = function(filters) {

@@ -32,14 +32,6 @@ InsetMap.prototype.setTypeFilters = function() {
     }
 };
 
-InsetMap.prototype.setPinFilter = function (day) {
-        var stateFilter = ['==', ['get', 'state'], this.state]
-        if (!day) {
-            return this.map.setFilter('event-pins', stateFilter);
-        }
-        this.map.setFilter('event-pins', ['all', stateFilter, ['==', ['get', 'eventDate'], day]]);
-}
-
 InsetMap.prototype.addPointsLayer = function () {
     let thisInset = this;
     this.map.loadImage('./pin_sdf.png', function (err, img) {

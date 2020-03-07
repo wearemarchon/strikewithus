@@ -265,8 +265,8 @@ function setDay(dayIndex) {
     var day = dayLookup[dayIndex];
     allMaps.forEach(function(thisMap) {
         let colors = getMapColors(day);
-        if (thisMap.setPinFilter)  {
-            thisMap.setPinFilter(day);
+        if (thisMap.setTypeFilters) {
+            thisMap.setTypeFilters(filters);
             thisMap.setColors(colors);
         }
     })
@@ -291,9 +291,9 @@ function setState(dayIdx) {
             buttons[i].className = '';
         }
     }
+    currentState = dayIdx;
     showInsets();
     setDay(dayIndex);
-    currentState = dayIdx;
 }
 
 function toggleFilter(type, ele) {
