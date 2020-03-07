@@ -12,7 +12,7 @@ var COLORS = {
     '4/24/2020': {
         background: '#f7f7f7',
         us: '#4d4d4d',
-        pins: '#e97d7f'
+        pins: '#82b7d1'
     }
 };
 

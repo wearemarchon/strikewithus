@@ -35,6 +35,8 @@
             position: fixed;
             height: 100%;
             overflow: auto;
+            border: 2px solid black;
+            box-sizing: border-box;
         }
         div.content {
             margin-left: 200px;
@@ -54,7 +56,6 @@
          .inset {
             width: 230px;
             flex: 1;
-            /* width: 25%; */
             height:150px;
             border:1px solid #fff;
             margin-left: 10px;
@@ -67,16 +68,14 @@
         .inset .mapboxgl-control-container{
             display: none;
         }
-
         .sidebar a {
             display: block;
             color: black;
-            border-right: 2px solid black;
             border-bottom: 2px solid black;
             border-top: none;
             border-left: none;
             text-decoration: none;
-            height: 33%;
+            height: 33.3%;
             text-align: center;
             font-size: 48px;
         }
@@ -87,7 +86,31 @@
             transform: translateY(-50%);
             font-family: GreveNarrow, serif;
         }
-
+        #day1Btn{
+            color: #ed8c89;
+        }
+        #day2Btn{
+            color: #000000;
+        }
+        #day3Btn{
+            color: #82b7d1;
+        }
+        #day1Btn:hover{
+            color: #ffffff;
+            background-color: #ed8c89;
+        }
+        #day2Btn:hover{
+            color: #f7f7f7;
+            background-color: #000000;
+        }
+        #day2Btn.active {
+            color: #dcbcc0;
+            background-color: #000000;
+        }
+        #day3Btn:hover{
+            color: #4d4d4d;
+            background-color: #82b7d1;
+        }
         .sidebar a.active {
             background-color: rgb(0, 0, 0);
             color: white;
@@ -110,16 +133,18 @@
                 width: 33.3%;
                 height: 100%;
                 box-sizing: border-box;
-                border-left: 2px solid black;
-                border-bottom: 2px solid black;
-                border-right: none;
+                border-right: 2px solid black;
+                border-bottom: none;
                 border-top: none;
                 font-size: 32px;
+            }
+            .sidebar a:last-of-type {
+                border-right: none;
             }
             div.content {
                 height: 92%!important;
                 margin-left: 0;
-                }
+            }
         }
     </style>
 </head>
@@ -241,7 +266,7 @@ function markerHtml(e){
     var locationState = split.slice(split.length - 2, split.length).join(',').trim();
 
     var formattedDate = date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'}) + ' ' + hours +':'+ mins+ ' '+ampm;
-    return '<a href='+link+'><strong>'+name.toUpperCase()+'</strong></a><br><i>'+formattedDate+'</i><br>'+locationName+'<br>'+locationAddress+'<br>'+locationState;
+    return '<a target="_blank" href='+link+'><strong>'+name.toUpperCase()+'</strong></a><br><i>'+formattedDate+'</i><br>'+locationName+'<br>'+locationAddress+'<br>'+locationState;
 }
 
 function drawMaps() {
