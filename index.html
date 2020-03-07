@@ -223,6 +223,7 @@
         <div id='ak-inset' class="inset"></div>
         <div id='hi-inset' class="inset"></div>
         <div id='pr-inset' class="inset"></div>
+        <div id='gu-inset' class="inset"></div>
 
     </div>
 </div>
@@ -351,7 +352,7 @@ function markerHtml(e){
 }
 
 function drawMaps() {
-    const states = ['AK', 'HI', 'PR'];
+    const states = ['AK', 'HI', 'PR', 'GU'];
     let mainMap = new MainMap('map', [-127.119844, 25.393099, -64.920107, 50.095843])
     states.forEach(function(state) {
         let inset = new InsetMap(state, `${state.toLowerCase()}-inset`, bBoxes[state], mainMap);
