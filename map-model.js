@@ -114,6 +114,13 @@ MainMap.prototype.addPointsLayer = function () {
     })
 }
 
+MainMap.prototype.resetView = function() {
+    showInsets();
+    this.map.fitBounds(this.bounds, {
+        duration: 2000
+    });
+}
+
 MainMap.prototype.init = function () {
     var me = this;
     var map = window.map = new mapboxgl.Map({
@@ -125,11 +132,20 @@ MainMap.prototype.init = function () {
     });
     this.map = map;
     map.addControl(new mapboxgl.NavigationControl());
+
     map.addControl(
         new MapboxGeocoder({
             accessToken: mapboxgl.accessToken,
-            mapboxgl: mapboxgl
-        }), 'top-left'
+            mapboxgl: mapboxgl,
+            countries: 'us'
+        })
+        .on('clear', function(result) {
+            me.resetView();
+        })
+        .on('result', function (result) {
+            hideInsets();
+        }),
+        'top-left'
     );
 
     // disable map rotation using right click + drag
@@ -214,7 +230,6 @@ MainMap.prototype.init = function () {
                 mapDiv.style.cursor = 'grab';
             }
             hoveredPinId = null;
-            me.hoveredPopup.remove();
         });
     })
 }
