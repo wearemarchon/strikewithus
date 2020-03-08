@@ -15,14 +15,45 @@ MainMap.prototype.setColors = function (colors) {
     });
 }
 
-MainMap.prototype.setPinFilter = function (day) {
+MainMap.getDayFilter = function() {
+    var dayLookupIndexed = [
+        null,
+        '4/22/2020',
+        '4/23/2020',
+        '4/24/2020'
+    ]; // currentState is 1 indexed not 0 indexed
+    
+    var day = currentState ? dayLookupIndexed[currentState] : null;
     if (!day) {
-
-        return this.map.setFilter('event-pins', null);
-
+        return null;
     }
-    this.map.setFilter('event-pins', ['==', ['get', 'eventDate'], day]);
+    return ['==', ['get', 'eventDate'], day];
+}
 
+MainMap.getTypeFilter = function() {
+    if (!filterBy) {
+        return null;
+    }
+    return ['==', ['get', 'host_type'], filterBy]
+
+}
+
+MainMap.prototype.setTypeFilters = function () {
+    var dayFilter = MainMap.getDayFilter();
+    this.hoveredPopup.remove(); //close any open popup
+    if (!dayFilter && !filterBy) {
+        return this.map.setFilter('event-pins', null);
+    }
+    var filterArray = [];
+    var filterByType = MainMap.getTypeFilter();
+    if (dayFilter && filterBy) {
+        filterArray = ['all', filterByType, dayFilter];
+    } else if (filterBy) {
+        filterArray = filterByType;
+    } else {
+        filterArray = dayFilter;
+    }
+    return this.map.setFilter('event-pins', filterArray);
 }
 
 MainMap.prototype.addPointsLayer = function () {
@@ -83,6 +114,13 @@ MainMap.prototype.addPointsLayer = function () {
     })
 }
 
+MainMap.prototype.resetView = function() {
+    showInsets();
+    this.map.fitBounds(this.bounds, {
+        duration: 2000
+    });
+}
+
 MainMap.prototype.init = function () {
     var me = this;
     var map = window.map = new mapboxgl.Map({
@@ -94,11 +132,20 @@ MainMap.prototype.init = function () {
     });
     this.map = map;
     map.addControl(new mapboxgl.NavigationControl());
+
     map.addControl(
         new MapboxGeocoder({
             accessToken: mapboxgl.accessToken,
-            mapboxgl: mapboxgl
-        }), 'top-left'
+            mapboxgl: mapboxgl,
+            countries: 'us'
+        })
+        .on('clear', function(result) {
+            me.resetView();
+        })
+        .on('result', function (result) {
+            hideInsets();
+        }),
+        'top-left'
     );
 
     // disable map rotation using right click + drag
@@ -121,7 +168,7 @@ MainMap.prototype.init = function () {
         });
 
         me.addPointsLayer();
-        var hoveredPopup = new mapboxgl.Popup({
+        me.hoveredPopup = new mapboxgl.Popup({
             offset: 25,
             closeButton: true,
             closeOnClick: false
@@ -163,7 +210,7 @@ MainMap.prototype.init = function () {
                 });
 
                 mapDiv.style.cursor = 'pointer';
-                hoveredPopup
+                me.hoveredPopup
                     .setLngLat(coordinates)
                     .setHTML(markerHtml(e))
                     .addTo(map);

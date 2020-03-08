@@ -37,9 +37,49 @@
             overflow: auto;
             border: 2px solid black;
             box-sizing: border-box;
+            
         }
         div.content {
             margin-left: 200px;
+        }
+        .filters {
+            position: absolute;
+            top: 62px;
+            z-index: 1;
+            left: 14px;
+            display: flex;
+            justify-content: space-evenly;
+            width: 238px;
+            padding: 2px;
+            background: #ffffffbd;
+            border-radius: 5px;
+        }
+        .filters .checkbox-container {
+            position: relative;
+            margin: auto;
+        }
+        .filters label {
+            margin-left: calc(1em + 4px);
+            cursor: pointer;
+        }
+        .filters label::before {
+            content: '';
+            border-radius: 100%;
+            width: calc(1em + 2px);
+            height: calc(1em + 2px);
+            display: block;
+            box-sizing: border-box;
+            border-radius: 0;
+            border: 1px solid #000000;
+            position: absolute;
+            left: 0;
+            top: 2px;
+            background-color: transparent;
+        }
+
+        .filters label.active::before {
+            background-color: #000000;
+
         }
 
         .map-overlay {
@@ -61,12 +101,13 @@
             margin-left: 10px;
             margin-right: 10px;
             box-sizing: content-box;
-
-
         }
 
         .inset .mapboxgl-control-container{
             display: none;
+        }
+        .mapboxgl-popup {
+            z-index: 3000;
         }
         .sidebar a {
             display: block;
@@ -77,6 +118,7 @@
             text-decoration: none;
             height: 33.3%;
             text-align: center;
+            cursor: pointer;
             font-size: 48px;
         }
 
@@ -156,10 +198,33 @@
     <a id='day3Btn' onclick="setState(3)"><div>DAY 3</div></a>
 </div>
 <div id='map' class='content'>
+    <div class="filters">
+        <div class="checkbox-container">FILTER BY:</div>
+        
+        <div class="checkbox-container"> 
+            <input id="all" name="type-filter" class="type-filter" type="radio" hidden checked />
+            <label for="all" class="filter-label active" onclick="toggleFilter('all', this)">
+                All
+            </label>
+        </div>
+        <div class="checkbox-container">
+            <input id="labor" name="type-filter" class="type-filter" type="radio" hidden  />
+            <label for="labor" class="filter-label" onclick="toggleFilter('labor', this)">
+                LABOR
+            </label>
+        </div> 
+        <div class="checkbox-container">
+            <input id="faith" name="type-filter" class="type-filter" type="radio" hidden  />
+            <label for="faith" class="filter-label" onclick="toggleFilter('faith', this)">
+                FAITH
+            </label>
+        </div>
+    </div>
     <div class="map-overlay">
         <div id='ak-inset' class="inset"></div>
         <div id='hi-inset' class="inset"></div>
         <div id='pr-inset' class="inset"></div>
+        <div id='gu-inset' class="inset"></div>
 
     </div>
 </div>
@@ -173,6 +238,7 @@
 mapboxgl.accessToken = 'pk.eyJ1Ijoid2VhcmVtYXJjaG9uIiwiYSI6ImNqdTFscXo3ZzAwYTE0ZWxzMWhrNnVtNHIifQ.ql7OysgSLnCazbiXZt8NFA';
 
 var allMaps = [];
+var filterBy = null;
 
 function hideInsets() {
     var insets = Array.from(document.getElementsByClassName('inset'));
@@ -211,8 +277,8 @@ function setDay(dayIndex) {
     var day = dayLookup[dayIndex];
     allMaps.forEach(function(thisMap) {
         let colors = getMapColors(day);
-        if (thisMap.setPinFilter)  {
-            thisMap.setPinFilter(day);
+        if (thisMap.setTypeFilters) {
+            thisMap.setTypeFilters();
             thisMap.setColors(colors);
         }
     })
@@ -224,6 +290,7 @@ var buttons = [
     document.getElementById('day3Btn')
 ];
 var currentState = null;
+
 function setState(dayIdx) {
     if(dayIdx === currentState){
         dayIdx = null;
@@ -236,9 +303,25 @@ function setState(dayIdx) {
             buttons[i].className = '';
         }
     }
+    currentState = dayIdx;
     showInsets();
     setDay(dayIndex);
-    currentState = dayIdx;
+}
+
+function toggleFilter(type, ele) {
+    Array.from(document.getElementsByClassName('filter-label')).forEach(function(label) {
+        label.classList.remove('active');
+    })
+    ele.classList.add('active');
+
+    filterBy = type === 'all' ? null : type;
+    
+    
+    allMaps.forEach(function (thisMap) {
+        if (thisMap.setTypeFilters) {
+            thisMap.setTypeFilters();
+        }
+    })
 }
 
 function markerHtml(e){
@@ -270,7 +353,7 @@ function markerHtml(e){
 }
 
 function drawMaps() {
-    const states = ['AK', 'HI', 'PR'];
+    const states = ['AK', 'HI', 'PR', 'GU'];
     let mainMap = new MainMap('map', [-127.119844, 25.393099, -64.920107, 50.095843])
     states.forEach(function(state) {
         let inset = new InsetMap(state, `${state.toLowerCase()}-inset`, bBoxes[state], mainMap);

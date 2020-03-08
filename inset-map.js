@@ -6,7 +6,22 @@ function InsetMap(state, id, bounds, mainMap) {
 }
 
 InsetMap.prototype.setColors = MainMap.prototype.setColors;
-InsetMap.prototype.setPinFilter = MainMap.prototype.setPinFilter;
+
+InsetMap.prototype.setTypeFilters = function(filterBy) {
+    var stateFilter = ['==', ['get', 'state'], this.state];
+    var filterArray = ['all', stateFilter];
+    var dayFilter = MainMap.getDayFilter();
+    var filterByType = MainMap.getTypeFilter();
+
+    if (dayFilter) {
+        filterArray.push(dayFilter);
+    }
+
+    if (filterByType) {
+        filterArray.push(filterByType);
+    }
+    return this.map.setFilter('event-pins', filterArray);
+};
 
 InsetMap.prototype.addPointsLayer = function () {
     let thisInset = this;
@@ -61,6 +76,7 @@ InsetMap.prototype.addPointsLayer = function () {
                 'icon-halo-color': '#000000'
             }
         });
+        thisInset.map.setFilter('event-pins', ['==', ['get', 'state'], thisInset.state]);
 
     })
 }
