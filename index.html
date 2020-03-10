@@ -349,7 +349,7 @@ function markerHtml(e){
     var locationState = split.slice(split.length - 2, split.length).join(',').trim();
 
     var formattedDate = date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'}) + ' ' + hours +':'+ mins+ ' '+ampm;
-    return '<a target="_blank" href='+link+'><strong>'+name.toUpperCase()+'</strong></a><br><i>'+formattedDate+'</i><br>'+locationName+'<br>'+locationAddress+'<br>'+locationState;
+    return '<a target="_blank" href='+link+(referrer ? "?source="+referrer+"&referrer="+referrer : "" )+'><strong>'+name.toUpperCase()+'</strong></a><br><i>'+formattedDate+'</i><br>'+locationName+'<br>'+locationAddress+'<br>'+locationState;
 }
 
 function drawMaps() {
