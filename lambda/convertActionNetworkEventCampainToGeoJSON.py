@@ -61,15 +61,17 @@ def make_coord(event: Dict) -> list:
     lat = coords.get('latitude')
     lng = coords.get('longitude')
     return [lng, lat]
-
-def make_host(event: Dict) -> str:
+    
+def check_host(event: Dict, kind: str):
     description = event.get('description')
-    if "**FAITH EVENT**" in description:
-        return "faith"
-    elif "**LABOR EVENT**" in description:
-        return "labor"
+    if (kind == "faith") and ("**FAITH EVENT**" in description):
+        return True
+    elif (kind == "labor") and ("**LABOR EVENT**" in description):
+        return True
+    elif (kind == "showcase") and ("**SHOWCASE EVENT**" in description):
+        return True
     else:
-        return ""
+        return False
 
 event_id = 0
 def make_id(event: Dict) -> str:
@@ -90,7 +92,9 @@ def convert_event(event: Dict) -> Dict:
         'eventLink': event.get('browser_url', ''),
         'location': make_location(event),
         'state': make_state(event),
-        'host_type': make_host(event)
+        'labor': check_host(event, 'labor'),
+        'faith': check_host(event, 'faith'),
+        'showcase': check_host(event, 'showcase')
       },
       "geometry": {
         "type": "Point",
@@ -140,3 +144,4 @@ def get_events_from_events_campaign(return_events=None,
 def lambda_handler(event, context):
     the_events = get_events_from_events_campaign()
     upload(the_events, "events.json", None)
+
