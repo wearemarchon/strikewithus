@@ -59,27 +59,8 @@ MainMap.prototype.setTypeFilters = function () {
 MainMap.prototype.addPointsLayer = function () {
     let mainMap = this;
     mainMap.map.loadImage('./pin_sdf.png', function (err, img) {
-
-        var canvas = document.createElement('canvas');
-        var ctx = canvas.getContext('2d');
-
-        canvas.width = img.width;
-        canvas.height = img.height;
-        ctx.drawImage(img, 0, 0);
-        var data = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        var alpha = new Uint8ClampedArray(data.data);
-        for (var i = 3; i < alpha.length; i += 4) {
-            alpha[i] = alpha[i - 3];
-        }
-        let imageName = 'pin'
-
-        mainMap.map.addImage(imageName, {
-            width: data.width,
-            height: data.height,
-            data: alpha
-        }, {
-            sdf: true
-        });
+        if (err) return;
+        mainMap.map.addImage('pin', img, {sdf: true});
         mainMap.map.addLayer({
             'id': 'event-pins',
             'type': 'symbol',
@@ -87,7 +68,7 @@ MainMap.prototype.addPointsLayer = function () {
             'layout': {
                 'icon-allow-overlap': true,
                 'icon-anchor': 'bottom',
-                'icon-image': imageName,
+                'icon-image': 'pin',
                 'icon-size': 0.5
             },
             'paint': {
@@ -105,7 +86,7 @@ MainMap.prototype.addPointsLayer = function () {
                     ]
                 ],
                 'icon-halo-blur': 0,
-                'icon-halo-width': 2,
+                'icon-halo-width': 0.5,
                 'icon-halo-color': '#000000'
             }
         });
