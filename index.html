@@ -202,23 +202,28 @@
 <div id='map' class='content'>
     <div class="filters">
         <div class="checkbox-container">FILTER BY:</div>
-        
-        <div class="checkbox-container"> 
-            <input id="all" name="type-filter" class="type-filter" type="radio" hidden checked />
-            <label for="all" class="filter-label active" onclick="toggleFilter('all', this)">
-                All
+        <div class="checkbox-container">
+            <input id="flagship" name="type-filter" class="type-filter" type="checkbox" hidden />
+            <label for="flagship" class="filter-label active" onclick="toggleFilter('flagship', this)">
+                FLAGSHIP
             </label>
         </div>
         <div class="checkbox-container">
-            <input id="labor" name="type-filter" class="type-filter" type="radio" hidden  />
-            <label for="labor" class="filter-label" onclick="toggleFilter('labor', this)">
+            <input id="labor" name="type-filter" class="type-filter" type="checkbox" hidden  />
+            <label for="labor" class="filter-label active" onclick="toggleFilter('labor', this)">
                 LABOR
             </label>
         </div> 
         <div class="checkbox-container">
-            <input id="faith" name="type-filter" class="type-filter" type="radio" hidden  />
-            <label for="faith" class="filter-label" onclick="toggleFilter('faith', this)">
+            <input id="faith" name="type-filter" class="type-filter" type="checkbox" hidden  />
+            <label for="faith" class="filter-label active" onclick="toggleFilter('faith', this)">
                 FAITH
+            </label>
+        </div>
+        <div class="checkbox-container">
+            <input id="other" name="type-filter" class="type-filter" type="checkbox" hidden />
+            <label for="other" class="filter-label active" onclick="toggleFilter('other', this)">
+                OTHER
             </label>
         </div>
     </div>
@@ -240,7 +245,12 @@
 mapboxgl.accessToken = 'pk.eyJ1Ijoid2VhcmVtYXJjaG9uIiwiYSI6ImNqdTFscXo3ZzAwYTE0ZWxzMWhrNnVtNHIifQ.ql7OysgSLnCazbiXZt8NFA';
 
 var allMaps = [];
-var filterBy = null;
+var filterBy = {
+    faith: true,
+    labor: true,
+    flagship: true,
+    other: true,
+};
 
 function hideInsets() {
     var insets = Array.from(document.getElementsByClassName('inset'));
@@ -318,13 +328,14 @@ function setState(dayIdx) {
 }
 
 function toggleFilter(type, ele) {
-    Array.from(document.getElementsByClassName('filter-label')).forEach(function(label) {
-        label.classList.remove('active');
-    })
-    ele.classList.add('active');
 
-    filterBy = type === 'all' ? null : type;
-    
+    if (filterBy[type]){
+        ele.classList.remove('active');
+    } else {
+        ele.classList.add('active');
+    }
+
+    filterBy[type] = !filterBy[type];
     
     allMaps.forEach(function (thisMap) {
         if (thisMap.setTypeFilters) {
