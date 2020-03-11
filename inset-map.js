@@ -20,6 +20,7 @@ InsetMap.prototype.setTypeFilters = function(filterBy) {
     if (filterByType) {
         filterArray.push(filterByType);
     }
+    
     return this.map.setFilter('event-pins', filterArray);
 };
 
