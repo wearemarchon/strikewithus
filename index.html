@@ -37,7 +37,6 @@
             overflow: auto;
             border: 2px solid black;
             box-sizing: border-box;
-            
         }
         div.content {
             margin-left: 200px;
@@ -93,7 +92,7 @@
             overflow: auto;
             z-index: 1;
         }
-         .inset {
+        .inset {
             width: 230px;
             flex: 1;
             height:150px;
@@ -101,6 +100,9 @@
             margin-left: 10px;
             margin-right: 10px;
             box-sizing: content-box;
+        }
+        .day-3 .inset {
+            border: 1px solid #4d4d4d;
         }
 
         .inset .mapboxgl-control-container{
@@ -295,6 +297,13 @@ function setState(dayIdx) {
     if(dayIdx === currentState){
         dayIdx = null;
     }
+    if (currentState) {
+        document.getElementById('map').classList.remove(`day-${currentState}`);
+    }
+    if (dayIdx) {
+        document.getElementById('map').classList.add(`day-${dayIdx}`);
+    }
+
     var dayIndex = dayIdx - 1;
     for(var i = 0; i < buttons.length; i++){
         if(dayIndex == i){
