@@ -94,7 +94,7 @@ MainMap.prototype.addPointsLayer = function () {
                 'icon-color': ['to-color',
                     ['case',
                         ['boolean', ['feature-state', 'hover'], false],
-                        '#82b7d1',
+                        '#e7e7e7',
                         ['match',
                             ['get', 'eventDate'],
                             '4/22/2020', COLORS['4/22/2020'].pins,
