@@ -137,7 +137,9 @@ MainMap.prototype.init = function () {
         new MapboxGeocoder({
             accessToken: mapboxgl.accessToken,
             mapboxgl: mapboxgl,
-            countries: 'us'
+            countries: 'us',
+            marker: false,
+            zoom: 12,
         })
         .on('clear', function(result) {
             me.resetView();
