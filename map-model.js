@@ -15,6 +15,13 @@ MainMap.prototype.setColors = function (colors) {
     });
 }
 
+MainMap.initFilters = function() {
+    // We want to only set initial state once, but need to do it only once all maps are loaded
+    if (numDone === totalMaps) {
+        setState(initialDay);
+    }
+}
+
 MainMap.getDayFilter = function() {
     var dayLookupIndexed = [
         null,
@@ -43,7 +50,6 @@ MainMap.getTypeFilter = function () {
     
         if (filterBy[key]) {
             if (key === 'other') {
-                console.log('other')
                 filterArray.push(['all', 
                     ['!=', ['get', 'faith'], true],
                     ['!=', ['get', 'labor'], true],
@@ -56,14 +62,15 @@ MainMap.getTypeFilter = function () {
         }
         return filterBy[key];
     })
-    console.log(filterArray)
     return filterArray;
 }
 
 MainMap.prototype.setTypeFilters = function () {
     var dayFilter = MainMap.getDayFilter();
     var filterByType = MainMap.getTypeFilter();
-
+    if (!this.map.getLayer('event-pins')) {
+        return;
+    }
     this.hoveredPopup.remove(); //close any open popup
     if (!dayFilter && !filterByType) { //all the checkboxes are on
         return this.map.setFilter('event-pins', null);
@@ -113,8 +120,8 @@ MainMap.prototype.addPointsLayer = function () {
                 'icon-halo-color': '#000000'
             }
         });
-
-        setState(initialDay);
+        numDone++;  
+        MainMap.initFilters();
     })
 }
 

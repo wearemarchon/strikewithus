@@ -20,8 +20,10 @@ InsetMap.prototype.setTypeFilters = function(filterBy) {
     if (filterByType) {
         filterArray.push(filterByType);
     }
-    
-    return this.map.setFilter('event-pins', filterArray);
+    if (this.map.getLayer('event-pins')) {
+
+        return this.map.setFilter('event-pins', filterArray);
+    }
 };
 
 InsetMap.prototype.addPointsLayer = function () {
@@ -59,6 +61,8 @@ InsetMap.prototype.addPointsLayer = function () {
             }
         });
         thisInset.map.setFilter('event-pins', ['==', ['get', 'state'], thisInset.state]);
+        numDone++;
+        MainMap.initFilters();
 
     })
 }
