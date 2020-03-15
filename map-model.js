@@ -15,6 +15,13 @@ MainMap.prototype.setColors = function (colors) {
     });
 }
 
+MainMap.initFilters = function() {
+    // We want to only set initial state once, but need to do it only once all maps are loaded
+    if (numDone === totalMaps) {
+        setState(initialDay);
+    }
+}
+
 MainMap.getDayFilter = function() {
     var dayLookupIndexed = [
         null,
@@ -35,6 +42,7 @@ MainMap.getTypeFilter = function () {
     if (!filterBy) {
         return null; // all on, just show all events
     }
+
     return ['==', ['get', filterBy], true];
 }
 
@@ -90,8 +98,8 @@ MainMap.prototype.addPointsLayer = function () {
                 'icon-halo-color': '#000000'
             }
         });
-
-        setState(initialDay);
+        numDone++;  
+        MainMap.initFilters();
     })
 }
 

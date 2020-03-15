@@ -366,9 +366,11 @@ function markerHtml(e){
     return '<a target="_blank" href='+link+(referrer ? "?source="+referrer+"&referrer="+referrer : "" )+'><strong>'+name.toUpperCase()+'</strong></a><br><i>'+formattedDate+'</i><br>'+locationName+'<br>'+locationAddress+'<br>'+locationState;
 }
 
+var numDone = 0;
+var totalMaps = 5;
 function drawMaps() {
     const states = ['AK', 'HI', 'PR', 'GU'];
-    let mainMap = new MainMap('map', [-127.119844, 25.393099, -64.920107, 50.095843])
+    let mainMap = new MainMap('map', [-127.119844, 25.393099, -64.920107, 50.095843]);
     states.forEach(function(state) {
         let inset = new InsetMap(state, `${state.toLowerCase()}-inset`, bBoxes[state], mainMap);
         inset.init();
@@ -378,7 +380,7 @@ function drawMaps() {
     allMaps.push(mainMap);
 }
 
-    drawMaps();
+drawMaps();
 </script>
 </body>
 </html>
