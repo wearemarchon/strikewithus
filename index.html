@@ -277,14 +277,12 @@ function showInsets() {
 }
 
 function getMapColors(day) {
-    console.log(day)
     if (!day) {
         return {
             background: COLORS['all'].background,
             foreground: COLORS['all'].us
         }
     }
-    console.log('day', day)
     return {
         background: COLORS[day].background,
         foreground: COLORS[day].us,
