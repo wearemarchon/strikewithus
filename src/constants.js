@@ -9,9 +9,9 @@ var COLORS = {
         pins: '#69c6b0'
     },
     '4/23/2020': {
-        background: '#e66fa1',
+        background: '#f7bf3b',
         us: '#f7f7f7',
-        pins: '#e66fa1'
+        pins: '#f7bf3b'
     },
     '4/24/2020': {
         background: '#f76c36',

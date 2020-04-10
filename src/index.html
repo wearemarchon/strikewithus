@@ -74,6 +74,33 @@
         .pink-gradient {
             background: linear-gradient(90deg, rgba(236,104,141,1) 0%, rgba(230,113,164,1) 35%, rgba(204,120,177,1) 65%, rgba(236,104,141,1) 100%);
         }
+
+        .yellow-button {
+            color: #f7bf3b;
+            background: transparent;
+        }
+        .cyan-button {
+            color: #69c6b0;
+            background: transparent;
+        }
+        .orange-button {
+            color: #f76c36;
+            background: transparent;
+        }
+
+        .yellow-button.active {
+            background: #f7bf3b;
+            color: white;
+        }
+        .cyan-button.active {
+            background: #69c6b0;
+            color: white;
+        }
+        .orange-button.active {
+            background: #f76c36;
+            color: white;
+        }
+
         .mapboxgl-popup-tip {
             visibility: hidden;
         }
@@ -159,18 +186,14 @@
             justify-content: space-evenly;
             width: 100%;
             color: white;
-            border: 2px solid var(--dark-purple);
+            border: 6px solid var(--dark-purple);
             box-sizing: border-box;
         }
-        .filter-bar a.active {
-            background-color: rgb(0, 0, 0);
-            color: white;
-        }
 
-        .filter-bar a:hover:not(.active) {
+        /* .filter-bar a:hover:not(.active) {
             background-color: #555;
             color: white;
-        }
+        } */
 
         .filter-bar .filter-item {
             width: 100%;
@@ -179,7 +202,7 @@
 
         .filter-bar .date-button {
             cursor: pointer;
-            filter: saturate(0.5);
+            /* filter: saturate(0.5); */
         }
         .filter-bar .date-button.active {
             width: 100%;
@@ -201,9 +224,9 @@
             <div class='filter-bar'>
                 <div  class="filter-item"><h3>FILTER BY:</h3></div>
                 <a id='all-events' class="filter-item date-button multi-gradient active" onclick="setState(null)"><h3>All Events</h3></a>
-                <a id='day1Btn' class="filter-item date-button green-gradient" onclick="setState(1)"><h3>April 22nd</h3></a>
-                <a id='day2Btn' class="filter-item date-button pink-gradient" onclick="setState(2)"><h3>April 23rd</h3></a>
-                <a id='day3Btn' class="filter-item date-button peach-gradient" onclick="setState(3)"><h3>April 24th</h3></a>
+                <a id='day1Btn' class="filter-item date-button cyan-button" onclick="setState(1)"><h3>April 22nd</h3></a>
+                <a id='day2Btn' class="filter-item date-button yellow-button" onclick="setState(2)"><h3>April 23rd</h3></a>
+                <a id='day3Btn' class="filter-item date-button orange-button" onclick="setState(3)"><h3>April 24th</h3></a>
             </div>
             <div id='map' class='content'>
                 <div class="filters">
