@@ -50,7 +50,8 @@ MainMap.prototype.setTypeFilters = function () {
     var dayFilter = MainMap.getDayFilter();
     var filterByType = MainMap.getTypeFilter();
     this.hoveredPopup.remove(); //close any open popup
-    if (!dayFilter && !filterByType) { // show all
+    if (!dayFilter && !filterByType) { //all the checkboxes are on
+        this.map.setFilter('event-pins-background', null);
         return this.map.setFilter('event-pins', null);
     }
     var filterArray = [];
@@ -61,46 +62,60 @@ MainMap.prototype.setTypeFilters = function () {
     } else {
         filterArray = dayFilter;
     }
+    this.map.setFilter('event-pins-background', filterArray)
     return this.map.setFilter('event-pins', filterArray);
 }
 
 MainMap.prototype.addPointsLayer = function () {
     let mainMap = this;
-    mainMap.map.loadImage('./pin_sdf.png', function (err, img) {
-        if (err) return;
-        mainMap.map.addImage('pin', img, {sdf: true});
-        mainMap.map.addLayer({
-            'id': 'event-pins',
-            'type': 'symbol',
-            'source': 'event-points',
-            'layout': {
-                'icon-allow-overlap': true,
-                'icon-anchor': 'bottom',
-                'icon-image': 'pin',
-                'icon-size': 0.5
-            },
-            'paint': {
-                'icon-color': ['to-color',
-                    ['case',
-                        ['boolean', ['feature-state', 'hover'], false],
-                        '#e7e7e7',
-                        ['match',
-                            ['get', 'eventDate'],
-                            '4/22/2020', COLORS['4/22/2020'].pins,
-                            '4/23/2020', COLORS['4/23/2020'].pins,
-                            '4/24/2020', COLORS['4/24/2020'].pins,
-                            '#000000'
-                        ]
+    mainMap.map.addLayer({
+        'id': 'event-pins-background',
+        'type': 'circle',
+        'source': 'event-points',
+        'paint': {
+            'circle-radius': 10,
+            'circle-color': ['to-color',
+                ['case',
+                    ['boolean', ['feature-state', 'hover'], false],
+                    '#e7e7e7',
+                    ['match',
+                        ['get', 'eventDate'],
+                        '4/22/2020', COLORS['4/22/2020'].pins,
+                        '4/23/2020', COLORS['4/23/2020'].pins,
+                        '4/24/2020', COLORS['4/24/2020'].pins,
+                        '#000000'
                     ]
-                ],
-                'icon-halo-blur': 0,
-                'icon-halo-width': 0.5,
-                'icon-halo-color': '#000000'
-            }
-        });
-        numDone++;  
-        MainMap.initFilters();
-    })
+                ]
+            ],
+        }
+    });
+    mainMap.map.addLayer({
+        'id': 'event-pins',
+        'type': 'circle',
+        'source': 'event-points',
+        'paint': {
+            'circle-radius': 6,
+            'circle-stroke-color': '#ffffff',
+            'circle-stroke-width': 3,
+            'circle-color': ['to-color',
+                ['case',
+                    ['boolean', ['feature-state', 'hover'], false],
+                    '#e7e7e7',
+                    ['match',
+                        ['get', 'eventDate'],
+                        '4/22/2020', COLORS['4/22/2020'].pins,
+                        '4/23/2020', COLORS['4/23/2020'].pins,
+                        '4/24/2020', COLORS['4/24/2020'].pins,
+                        '#000000'
+                    ]
+                ]
+            ],
+        }
+    });
+ 
+
+    numDone++;  
+    MainMap.initFilters();
 }
 
 MainMap.prototype.resetView = function() {

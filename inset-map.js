@@ -21,6 +21,7 @@ InsetMap.prototype.setTypeFilters = function(filterBy) {
         filterArray.push(filterByType);
     }
     if (this.map.getLayer('event-pins')) {
+        this.map.setFilter('event-pins-background', filterArray);
 
         return this.map.setFilter('event-pins', filterArray);
     }
@@ -32,20 +33,15 @@ InsetMap.prototype.addPointsLayer = function () {
         let imageName = this.state + 'pin'
         thisInset.map.addImage(imageName, img, {sdf: true });
         thisInset.map.addLayer({
-            'id': 'event-pins',
-            'type': 'symbol',
+            'id': 'event-pins-background',
+            'type': 'circle',
             'source': 'event-points',
-            'layout': {
-                'icon-allow-overlap': true,
-                'icon-anchor': 'bottom',
-                'icon-image': imageName,
-                'icon-size': 0.5
-            },
             'paint': {
-                'icon-color': ['to-color',
+                'circle-radius': 10,
+                'circle-color': ['to-color',
                     ['case',
                         ['boolean', ['feature-state', 'hover'], false],
-                        '#82b7d1',
+                        '#e7e7e7',
                         ['match',
                             ['get', 'eventDate'],
                             '4/22/2020', COLORS['4/22/2020'].pins,
@@ -55,9 +51,29 @@ InsetMap.prototype.addPointsLayer = function () {
                         ]
                     ]
                 ],
-                'icon-halo-blur': 0,
-                'icon-halo-width': 0.5,
-                'icon-halo-color': '#000000'
+            }
+        });
+        thisInset.map.addLayer({
+            'id': 'event-pins',
+            'type': 'circle',
+            'source': 'event-points',
+            'paint': {
+                'circle-radius': 6,
+                'circle-stroke-color': '#ffffff',
+                'circle-stroke-width': 3,
+                'circle-color': ['to-color',
+                    ['case',
+                        ['boolean', ['feature-state', 'hover'], false],
+                        '#e7e7e7',
+                        ['match',
+                            ['get', 'eventDate'],
+                            '4/22/2020', COLORS['4/22/2020'].pins,
+                            '4/23/2020', COLORS['4/23/2020'].pins,
+                            '4/24/2020', COLORS['4/24/2020'].pins,
+                            '#000000'
+                        ]
+                    ]
+                ],
             }
         });
         thisInset.map.setFilter('event-pins', ['==', ['get', 'state'], thisInset.state]);
