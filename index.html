@@ -255,12 +255,7 @@
 mapboxgl.accessToken = 'pk.eyJ1Ijoid2VhcmVtYXJjaG9uIiwiYSI6ImNqdTFscXo3ZzAwYTE0ZWxzMWhrNnVtNHIifQ.ql7OysgSLnCazbiXZt8NFA';
 
 var allMaps = [];
-var filterBy = {
-    faith: true,
-    labor: true,
-    flagship: true,
-    other: true,
-};
+var filterBy = null;
 
 function hideInsets() {
     var insets = Array.from(document.getElementsByClassName('inset'));
@@ -342,14 +337,13 @@ function setState(dayIdx) {
 }
 
 function toggleFilter(type, ele) {
-
-    if (filterBy[type]){
+    Array.from(document.getElementsByClassName('filter-label')).forEach(function(ele) {
         ele.classList.remove('active');
-    } else {
-        ele.classList.add('active');
-    }
-
-    filterBy[type] = !filterBy[type];
+    })
+   
+    ele.classList.add('active');
+    
+    filterBy = type === 'all' ? null : type;
     
     allMaps.forEach(function (thisMap) {
         if (thisMap.setTypeFilters) {

@@ -38,39 +38,17 @@ MainMap.getDayFilter = function() {
 }
 
 MainMap.getTypeFilter = function () {
-    var numberOfFilters = 4;
-    var typesToInclude = Object.keys(filterBy).filter(function (key) {
-        return filterBy[key];
-    });
-    if (typesToInclude.length === numberOfFilters) {
+
+    if (!filterBy) {
         return null; // all on, just show all events
     }
-    let filterArray = ['any'];
-    Object.keys(filterBy).forEach(function (key) {
-    
-        if (filterBy[key]) {
-            if (key === 'other') {
-                filterArray.push(['all', 
-                    ['!=', ['get', 'faith'], true],
-                    ['!=', ['get', 'labor'], true],
-                    ['!=', ['get', 'flagship'], true]
-                ])
- 
-            } else {
-                filterArray.push(['==', ['get', key], true])
-            }
-        }
-        return filterBy[key];
-    })
-    return filterArray;
+
+    return ['==', ['get', filterBy], true];
 }
 
 MainMap.prototype.setTypeFilters = function () {
     var dayFilter = MainMap.getDayFilter();
     var filterByType = MainMap.getTypeFilter();
-    if (!this.map.getLayer('event-pins')) {
-        return;
-    }
     this.hoveredPopup.remove(); //close any open popup
     if (!dayFilter && !filterByType) { //all the checkboxes are on
         this.map.setFilter('event-pins-background', null);
