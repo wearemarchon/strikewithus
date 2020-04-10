@@ -18,8 +18,9 @@
             --yellow: #ffde16;
             --red: #f00004;
             --cyan: #69c6b0;
+            --background: --dark-purple;
         }
-        body { margin: 0; padding: 0; }
+        body { margin: 0; padding: 0; background-color: var(--dark-purple);}
         html, body, #map { height: 100%; }
         body {
             font-family: neue-haas-grotesk-display, sans-serif;
@@ -37,12 +38,25 @@
         h3 {
             font-family: titling-gothic-fb, sans-serif;
             text-transform: uppercase;
-            font-size: 36px;
+            font-size: 18px;
         }
         h4 {
             font-family: neue-haas-grotesk-display, sans-serif;
             font-style: normal;
             font-weight: 100;
+        }
+        .main {
+            display: flex;
+            flex-flow: row;
+            height: 100vh;
+        }
+        .map-container {
+            display: flex;
+            flex-flow: column;
+            height: 100vh;
+        }
+        #map {
+            width: 80vw;
         }
         .hidden {
             display: none;
@@ -51,7 +65,7 @@
             background: linear-gradient(90deg, rgba(136,198,86,1) 0%, rgba(203,219,42,1) 20%, rgba(248,210,51,1) 50%,  rgba(244,125,80,1) 80%, rgba(242,97,70,1) 100%);
         }
         .peach-gradient {
-            background: linear-gradient(90deg, rgba(242,97,70,1) 0%, rgba(251,114,44,1) 35%, rgba(248,210,51,1) 65%, rgba(248,83,113,1) 100%);
+            background: linear-gradient(90deg, rgba(242,97,70,1) 0%, rgba(251,114,44,1) 35%, rgba(246,91,90,1) 65%, rgba(248,83,113,1) 100%);
         }
         .green-gradient {
             background: linear-gradient(90deg, rgba(136,198,86,1) 0%, rgba(195,180,73,1) 35%, rgba(149,196,80,1) 65%, rgba(136,198,86,1) 100%);
@@ -66,20 +80,6 @@
             background: rgb(242, 242, 242);
             box-shadow: 2px 2px 5px;
             border-radius: 0px;
-        }
-        .sidebar {
-            margin: 0;
-            padding: 0;
-            width: 200px;
-            background-color: white;
-            position: fixed;
-            height: 100%;
-            overflow: auto;
-            border: 2px solid black;
-            box-sizing: border-box;
-        }
-        div.content {
-            margin-left: 200px;
         }
         .filters {
             position: absolute;
@@ -151,79 +151,41 @@
         .mapboxgl-popup {
             z-index: 3000;
         }
-        .sidebar a {
-            display: block;
-            color: black;
-            border-bottom: 2px solid black;
-            border-top: none;
-            border-left: none;
-            text-decoration: none;
-            height: 33.3%;
-            text-align: center;
-            cursor: pointer;
-            font-size: 48px;
-        }
 
-        .sidebar a div{
-            position: relative;
-            top: 50%;
-            transform: translateY(-50%);
+        .filter-bar {
+            display: flex;
+            background: var(--dark-purple);
+            justify-content: space-evenly;
+            width: 100%;
+            color: white;
+            border: 2px solid var(--dark-purple);
+            box-sizing: border-box;
         }
-        #day1Btn{
-            color: #ed8c89;
-        }
-        #day2Btn{
-            color: #000000;
-        }
-        #day3Btn{
-            color: #82b7d1;
-        }
-        #day1Btn:hover{
-            color: #ffffff;
-            background-color: #ed8c89;
-        }
-        #day2Btn:hover{
-            color: #f7f7f7;
-            background-color: #000000;
-        }
-        #day2Btn.active {
-            color: #dcbcc0;
-            background-color: #000000;
-        }
-        #day3Btn:hover{
-            color: #4d4d4d;
-            background-color: #82b7d1;
-        }
-        .sidebar a.active {
+        .filter-bar a.active {
             background-color: rgb(0, 0, 0);
             color: white;
         }
 
-        .sidebar a:hover:not(.active) {
+        .filter-bar a:hover:not(.active) {
             background-color: #555;
             color: white;
         }
 
+        .filter-bar .filter-item {
+            width: 100%;
+            text-align: center;
+        }
 
+        .filter-bar .date-button {
+            cursor: pointer;
+            filter: saturate(0.5);
+        }
+        .filter-bar .date-button.active {
+            width: 100%;
+            text-align: center;
+            filter: saturate(1.0);
+        }
         @media screen and (max-width: 700px) {
-            .sidebar {
-                width: 100%;
-                position: relative;
-                height: 8%;
-            }
-            .sidebar a {
-                float: left;
-                width: 33.3%;
-                height: 100%;
-                box-sizing: border-box;
-                border-right: 2px solid black;
-                border-bottom: none;
-                border-top: none;
-                font-size: 32px;
-            }
-            .sidebar a:last-of-type {
-                border-right: none;
-            }
             div.content {
                 height: 92%!important;
                 margin-left: 0;
@@ -233,47 +195,56 @@
 </head>
 
 <body>
-<div class='sidebar'>
-    <a id='day1Btn' onclick="setState(1)"><div>April 22nd</div></a>
-    <a id='day2Btn' onclick="setState(2)"><div>April 23rd</div></a>
-    <a id='day3Btn' onclick="setState(3)"><div>April 24th</div></a>
-</div>
-<div id='map' class='content'>
-    <div class="filters">
-        <div class="checkbox-container">FILTER BY:</div>
-        <div class="checkbox-container">
-            <input id="flagship" name="type-filter" class="type-filter" type="checkbox" hidden />
-            <label for="flagship" class="filter-label active" onclick="toggleFilter('flagship', this)">
-                FLAGSHIP
-            </label>
+    <main class="main">
+        <div class="map-container">
+            <div class='filter-bar'>
+                <div  class="filter-item"><h3>FILTER BY:</h3></div>
+                <a id='all-events' class="filter-item date-button multi-gradient active" onclick="setState(null)"><h3>All Events</h3></a>
+                <a id='day1Btn' class="filter-item date-button green-gradient" onclick="setState(1)"><h3>April 22nd</h3></a>
+                <a id='day2Btn' class="filter-item date-button pink-gradient" onclick="setState(2)"><h3>April 23rd</h3></a>
+                <a id='day3Btn' class="filter-item date-button peach-gradient" onclick="setState(3)"><h3>April 24th</h3></a>
+            </div>
+            <div id='map' class='content'>
+                <div class="filters">
+                    <div class="checkbox-container">FILTER BY:</div>
+                    <div class="checkbox-container">
+                        <input id="flagship" name="type-filter" class="type-filter" type="checkbox" hidden />
+                        <label for="flagship" class="filter-label active" onclick="toggleFilter('flagship', this)">
+                            FLAGSHIP
+                        </label>
+                    </div>
+                    <div class="checkbox-container">
+                        <input id="labor" name="type-filter" class="type-filter" type="checkbox" hidden  />
+                        <label for="labor" class="filter-label active" onclick="toggleFilter('labor', this)">
+                            LABOR
+                        </label>
+                    </div> 
+                    <div class="checkbox-container">
+                        <input id="faith" name="type-filter" class="type-filter" type="checkbox" hidden  />
+                        <label for="faith" class="filter-label active" onclick="toggleFilter('faith', this)">
+                            FAITH
+                        </label>
+                    </div>
+                    <div class="checkbox-container">
+                        <input id="other" name="type-filter" class="type-filter" type="checkbox" hidden />
+                        <label for="other" class="filter-label active" onclick="toggleFilter('other', this)">
+                            OTHER
+                        </label>
+                    </div>
+                </div>
+                <div class="map-overlay">
+                    <div id='ak-inset' class="inset"></div>
+                    <div id='hi-inset' class="inset"></div>
+                    <div id='pr-inset' class="inset"></div>
+                    <div id='gu-inset' class="inset"></div>
+            
+                </div>
+            </div>
         </div>
-        <div class="checkbox-container">
-            <input id="labor" name="type-filter" class="type-filter" type="checkbox" hidden  />
-            <label for="labor" class="filter-label active" onclick="toggleFilter('labor', this)">
-                LABOR
-            </label>
-        </div> 
-        <div class="checkbox-container">
-            <input id="faith" name="type-filter" class="type-filter" type="checkbox" hidden  />
-            <label for="faith" class="filter-label active" onclick="toggleFilter('faith', this)">
-                FAITH
-            </label>
-        </div>
-        <div class="checkbox-container">
-            <input id="other" name="type-filter" class="type-filter" type="checkbox" hidden />
-            <label for="other" class="filter-label active" onclick="toggleFilter('other', this)">
-                OTHER
-            </label>
-        </div>
-    </div>
-    <div class="map-overlay">
-        <div id='ak-inset' class="inset"></div>
-        <div id='hi-inset' class="inset"></div>
-        <div id='pr-inset' class="inset"></div>
-        <div id='gu-inset' class="inset"></div>
+        <div class="sidebar">
 
-    </div>
-</div>
+        </div>
+    </main>
 
 <script src='https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js'></script>
 <script src="./constants.js" ></script>
@@ -306,12 +277,14 @@ function showInsets() {
 }
 
 function getMapColors(day) {
+    console.log(day)
     if (!day) {
         return {
-            background: COLORS['4/22/2020'].background,
-            foreground: COLORS['4/22/2020'].us
+            background: COLORS['all'].background,
+            foreground: COLORS['all'].us
         }
     }
+    console.log('day', day)
     return {
         background: COLORS[day].background,
         foreground: COLORS[day].us,
@@ -335,11 +308,7 @@ function setDay(dayIndex) {
     })
 }
 
-var buttons = [
-    document.getElementById('day1Btn'),
-    document.getElementById('day2Btn'),
-    document.getElementById('day3Btn')
-];
+var buttons = Array.from(document.getElementsByClassName('date-button'));
 var currentState = null;
 
 function setState(dayIdx) {
@@ -354,11 +323,19 @@ function setState(dayIdx) {
     }
 
     var dayIndex = dayIdx - 1;
-    for(var i = 0; i < buttons.length; i++){
-        if(dayIndex == i){
-            buttons[i].className = 'active';
-        } else {
-            buttons[i].className = '';
+    if (!dayIdx) {
+        buttons.forEach((button) => {
+            button.classList.remove('active');
+        })
+        console.log('all on')
+        buttons[0].classList.add('active');
+    } else {
+        for(var i = 0; i < buttons.length; i++){
+            if(dayIdx == i){
+                buttons[i].classList.add('active');
+            } else {
+                buttons[i].classList.remove('active');
+            }
         }
     }
     currentState = dayIdx;

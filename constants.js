@@ -1,18 +1,22 @@
 var COLORS = {
-    '4/22/2020': {
+    'all' :{
         background: '#b3b3b3',
         us: '#ffffff',
-        pins: '#ed8c89'
+    },
+    '4/22/2020': {
+        background: '#69c6b0',
+        us: '#ffffff',
+        pins: '#69c6b0'
     },
     '4/23/2020': {
-        background: '#dcbcc0',
+        background: '#e66fa1',
         us: '#f7f7f7',
-        pins: '#000000'
+        pins: '#e66fa1'
     },
     '4/24/2020': {
-        background: '#f7f7f7',
-        us: '#4d4d4d',
-        pins: '#82b7d1'
+        background: '#f76c36',
+        us: '#f7f7f7',
+        pins: '#f76c36'
     }
 };
 
