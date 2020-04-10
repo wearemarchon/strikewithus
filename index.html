@@ -6,18 +6,58 @@
     <meta charset='utf-8'>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <link rel='stylesheet' href="https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css" />
+    <link rel="stylesheet" href="https://use.typekit.net/xlp1efb.css">
     <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.2/mapbox-gl-geocoder.min.js"></script>
     <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.2/mapbox-gl-geocoder.css" type="text/css"/>
     <style>
+        :root {
+            --dark-purple:#240e34;
+            --med-purple:#321b43;
+            --purple:#463057;
+            --light-purple:#9086b6;
+            --yellow: #ffde16;
+            --red: #f00004;
+            --cyan: #69c6b0;
+        }
         body { margin: 0; padding: 0; }
         html, body, #map { height: 100%; }
-        @font-face {
-            font-family: GreveNarrow;
-            font-weight: 800;
-            src: url("./GreveNarrow-800.otf") format("opentype");
+        body {
+            font-family: neue-haas-grotesk-display, sans-serif;
+            font-style: normal;
+            font-weight: 100;
+        }
+        h1 { 
+            font-family: titling-gothic-fb, sans-serif;
+            font-size: 73px;
+        }
+        h2 {
+            font-family: titling-gothic-fb, sans-serif;
+            font-size: 66px;
+        }
+        h3 {
+            font-family: titling-gothic-fb, sans-serif;
+            text-transform: uppercase;
+            font-size: 36px;
+        }
+        h4 {
+            font-family: neue-haas-grotesk-display, sans-serif;
+            font-style: normal;
+            font-weight: 100;
         }
         .hidden {
             display: none;
+        }
+        .multi-gradient {
+            background: linear-gradient(90deg, rgba(136,198,86,1) 0%, rgba(203,219,42,1) 20%, rgba(248,210,51,1) 50%,  rgba(244,125,80,1) 80%, rgba(242,97,70,1) 100%);
+        }
+        .peach-gradient {
+            background: linear-gradient(90deg, rgba(242,97,70,1) 0%, rgba(251,114,44,1) 35%, rgba(248,210,51,1) 65%, rgba(248,83,113,1) 100%);
+        }
+        .green-gradient {
+            background: linear-gradient(90deg, rgba(136,198,86,1) 0%, rgba(195,180,73,1) 35%, rgba(149,196,80,1) 65%, rgba(136,198,86,1) 100%);
+        }
+        .pink-gradient {
+            background: linear-gradient(90deg, rgba(236,104,141,1) 0%, rgba(230,113,164,1) 35%, rgba(204,120,177,1) 65%, rgba(236,104,141,1) 100%);
         }
         .mapboxgl-popup-tip {
             visibility: hidden;
@@ -128,7 +168,6 @@
             position: relative;
             top: 50%;
             transform: translateY(-50%);
-            font-family: GreveNarrow, serif;
         }
         #day1Btn{
             color: #ed8c89;
