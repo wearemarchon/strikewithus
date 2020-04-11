@@ -1,0 +1,205 @@
+:root {
+    --dark-purple:#240e34;
+    --med-purple:#321b43;
+    --purple:#463057;
+    --light-purple:#9086b6;
+    --yellow: #ffde16;
+    --red: #f00004;
+    --cyan: #69c6b0;
+    --background: --dark-purple;
+}
+body { margin: 0; padding: 0; background-color: var(--dark-purple);}
+html, body, #map { height: 100%; }
+body {
+    font-family: neue-haas-grotesk-display, sans-serif;
+    font-style: normal;
+    font-weight: 100;
+}
+h1 {
+    font-family: titling-gothic-fb, sans-serif;
+    font-size: 73px;
+}
+h2 {
+    font-family: titling-gothic-fb, sans-serif;
+    font-size: 66px;
+}
+h3 {
+    font-family: titling-gothic-fb, sans-serif;
+    text-transform: uppercase;
+    font-size: 18px;
+}
+h4 {
+    font-family: neue-haas-grotesk-display, sans-serif;
+    font-style: normal;
+    font-weight: 100;
+}
+.main {
+    display: flex;
+    flex-flow: row;
+    height: 100vh;
+}
+.map-container {
+    display: flex;
+    flex-flow: column;
+    height: 100vh;
+}
+#map {
+    width: 100vw;
+}
+
+.hidden {
+    display: none;
+}
+.multi-gradient {
+    background: linear-gradient(90deg, rgba(136,198,86,1) 0%, rgba(203,219,42,1) 20%, rgba(248,210,51,1) 50%,  rgba(244,125,80,1) 80%, rgba(242,97,70,1) 100%);
+}
+.peach-gradient {
+    background: linear-gradient(90deg, rgba(242,97,70,1) 0%, rgba(251,114,44,1) 35%, rgba(246,91,90,1) 65%, rgba(248,83,113,1) 100%);
+}
+.green-gradient {
+    background: linear-gradient(90deg, rgba(136,198,86,1) 0%, rgba(195,180,73,1) 35%, rgba(149,196,80,1) 65%, rgba(136,198,86,1) 100%);
+}
+.pink-gradient {
+    background: linear-gradient(90deg, rgba(236,104,141,1) 0%, rgba(230,113,164,1) 35%, rgba(204,120,177,1) 65%, rgba(236,104,141,1) 100%);
+}
+
+.yellow-button {
+    color: #f7bf3b;
+    background: transparent;
+}
+.cyan-button {
+    color: #69c6b0;
+    background: transparent;
+}
+.orange-button {
+    color: #f76c36;
+    background: transparent;
+}
+
+.yellow-button.active {
+    background: #f7bf3b;
+    color: white;
+}
+.cyan-button.active {
+    background: #69c6b0;
+    color: white;
+}
+.orange-button.active {
+    background: #f76c36;
+    color: white;
+}
+
+.mapboxgl-popup-tip {
+    visibility: hidden;
+}
+.mapboxgl-popup-content {
+    background: rgb(242, 242, 242);
+    box-shadow: 2px 2px 5px;
+    border-radius: 0px;
+}
+.filters {
+    position: absolute;
+    top: 62px;
+    z-index: 1;
+    left: 10px;
+    display: flex;
+    justify-content: flex-end;
+    flex-flow: row wrap;
+    padding: 2px;
+    background: #ffffffbd;
+    border-radius: 5px;
+}
+.filters .checkbox-container {
+    position: relative;
+    margin: auto 10px;
+}
+.filters label {
+    margin-left: calc(1em + 4px);
+    cursor: pointer;
+}
+.filters label::before {
+    content: '';
+    border-radius: 100%;
+    width: calc(1em + 2px);
+    height: calc(1em + 2px);
+    display: block;
+    box-sizing: border-box;
+    border-radius: 0;
+    border: 1px solid #000000;
+    position: absolute;
+    left: 0;
+    top: 2px;
+    background-color: transparent;
+}
+
+.filters label.active::before {
+    background-color: #000000;
+
+}
+
+.map-overlay {
+    position: absolute;
+    bottom: 10px;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-family: Arial, sans-serif;
+    overflow: auto;
+    z-index: 1;
+}
+.inset {
+    width: 230px;
+    flex: 1;
+    height:150px;
+    border:1px solid #fff;
+    margin-left: 10px;
+    margin-right: 10px;
+    box-sizing: content-box;
+}
+.day-3 .inset {
+    border: 1px solid #4d4d4d;
+}
+
+.inset .mapboxgl-control-container{
+    display: none;
+}
+.mapboxgl-popup {
+    z-index: 3000;
+}
+
+.filter-bar {
+    display: flex;
+    background: var(--dark-purple);
+    justify-content: space-evenly;
+    width: 100%;
+    color: white;
+    border: 6px solid var(--dark-purple);
+    box-sizing: border-box;
+}
+
+/* .filter-bar a:hover:not(.active) {
+    background-color: #555;
+    color: white;
+} */
+
+.filter-bar .filter-item {
+    width: 100%;
+    text-align: center;
+}
+
+.filter-bar .date-button {
+    cursor: pointer;
+    /* filter: saturate(0.5); */
+}
+.filter-bar .date-button.active {
+    width: 100%;
+    text-align: center;
+    filter: saturate(1.0);
+}
+@media screen and (max-width: 700px) {
+    div.content {
+        height: 92%!important;
+        margin-left: 0;
+    }
+}
