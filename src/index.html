@@ -27,7 +27,7 @@
             font-style: normal;
             font-weight: 100;
         }
-        h1 { 
+        h1 {
             font-family: titling-gothic-fb, sans-serif;
             font-size: 73px;
         }
@@ -58,7 +58,7 @@
         #map {
             width: 100vw;
         }
-   
+
         .hidden {
             display: none;
         }
@@ -242,7 +242,7 @@
                         <label for="labor" class="filter-label active" onclick="toggleFilter('labor', this)">
                             LABOR
                         </label>
-                    </div> 
+                    </div>
                     <div class="checkbox-container">
                         <input id="faith" name="type-filter" class="type-filter" type="checkbox" hidden  />
                         <label for="faith" class="filter-label active" onclick="toggleFilter('faith', this)">
@@ -261,7 +261,7 @@
                     <div id='hi-inset' class="inset"></div>
                     <div id='pr-inset' class="inset"></div>
                     <div id='gu-inset' class="inset"></div>
-            
+
                 </div>
             </div>
         </div>
@@ -364,11 +364,11 @@ function toggleFilter(type, ele) {
     Array.from(document.getElementsByClassName('filter-label')).forEach(function(ele) {
         ele.classList.remove('active');
     })
-   
+
     ele.classList.add('active');
-    
+
     filterBy = type === 'all' ? null : type;
-    
+
     allMaps.forEach(function (thisMap) {
         if (thisMap.setTypeFilters) {
             thisMap.setTypeFilters();
