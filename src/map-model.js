@@ -135,7 +135,6 @@ MainMap.prototype.addPointsLayer = function () {
 
 MainMap.prototype.resetView = function() {
     showInsets();
-    console.log(this)
     this.map.fitBounds(this.bounds, {
         duration: 2000
     });
