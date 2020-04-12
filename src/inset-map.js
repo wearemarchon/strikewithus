@@ -5,7 +5,9 @@ function InsetMap(state, id, bounds, mainMap) {
     this.mainMap = mainMap;
 }
 
-InsetMap.prototype.resetBounds = MainMap.prototype.resetBounds;
+InsetMap.prototype.resetBounds = function () {
+     this.map.fitBounds(this.bounds);
+};
 
 InsetMap.prototype.setTypeFilters = function (filterBy) {
     var stateFilter = ['==', ['get', 'state'], this.state];

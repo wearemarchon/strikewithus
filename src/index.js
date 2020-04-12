@@ -31,7 +31,7 @@ var currentState = null;
 
 function setState(dayIdx) {
     if(dayIdx === currentState){
-        dayIdx = null;
+        return;
     }
     if (currentState) {
         document.getElementById('map').classList.remove(`day-${currentState}`);

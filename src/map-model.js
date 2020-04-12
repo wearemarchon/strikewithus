@@ -5,9 +5,7 @@ function MainMap(id, bounds) {
 }
 
 MainMap.prototype.resetBounds = function (colors) {
-    this.map.fitBounds(this.bounds, {
-        duration: 2000
-    });
+    this.resetView();
 }
 
 MainMap.initFilters = function() {
@@ -65,16 +63,21 @@ MainMap.prototype.addPointsLayer = function () {
     let mainMap = this;
     mainMap.map.addLayer(EVENT_LAYER);
     mainMap.map.addLayer(BACKGROUND_LAYER);
- 
-
     numDone++;  
     MainMap.initFilters();
 }
 
 MainMap.prototype.resetView = function() {
     showInsets();
+    console.log('resetting')
     this.map.fitBounds(this.bounds, {
-        duration: 2000
+        duration: 2000,
+        padding: {
+            top: 20,
+            bottom: 150,
+            right: 0,
+            left: 0,
+        },
     });
 }
 
@@ -116,7 +119,13 @@ MainMap.prototype.init = function () {
         new mapboxgl.LngLat(-127.119844, 25.393099),
         new mapboxgl.LngLat(-64.920107, 50.095843)
     ), {
-        animate: false
+        animate: false,
+        padding: {
+            top: 20,
+            bottom: 150,
+            right: 0,
+            left: 0,
+        },
     });
 
     map.on('load', function () {
