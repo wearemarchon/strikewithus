@@ -17,32 +17,11 @@ function showInsets() {
     })
 }
 
-function getMapColors(day) {
-    if (!day) {
-        return {
-            background: COLORS['all'].background,
-            foreground: COLORS['all'].us
-        }
-    }
-    return {
-        background: COLORS[day].background,
-        foreground: COLORS[day].us,
-    }
-}
-
-function setDay(dayIndex) {
-    var background,foreground;
-    var dayLookup = [
-        '4/22/2020',
-        '4/23/2020',
-        '4/24/2020'
-    ];
-    var day = dayLookup[dayIndex];
+function setDay() {
     allMaps.forEach(function(thisMap) {
-        let colors = getMapColors(day);
         if (thisMap.setTypeFilters) {
             thisMap.setTypeFilters();
-            thisMap.setColors(colors);
+            thisMap.resetBounds();
         }
     })
 }

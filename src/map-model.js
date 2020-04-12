@@ -3,13 +3,7 @@ function MainMap(id, bounds) {
     this.bounds = bounds;
 }
 
-MainMap.prototype.setColors = function (colors) {
-    // Update background
-    this.map.setPaintProperty('background', 'background-color', colors.background);
-    // Update pins
-    // Update polygon color
-    this.map.setPaintProperty('us-polygon', 'fill-color', colors.foreground);
-    this.map.setPaintProperty('us-territories', 'fill-color', colors.foreground);
+MainMap.prototype.resetBounds = function (colors) {
     this.map.fitBounds(this.bounds, {
         duration: 2000
     });
@@ -68,50 +62,8 @@ MainMap.prototype.setTypeFilters = function () {
 
 MainMap.prototype.addPointsLayer = function () {
     let mainMap = this;
-    mainMap.map.addLayer({
-        'id': 'event-pins-background',
-        'type': 'circle',
-        'source': 'event-points',
-        'paint': {
-            'circle-radius': 10,
-            'circle-color': ['to-color',
-                ['case',
-                    ['boolean', ['feature-state', 'hover'], false],
-                    '#e7e7e7',
-                    ['match',
-                        ['get', 'eventDate'],
-                        '4/22/2020', COLORS['4/22/2020'].pins,
-                        '4/23/2020', COLORS['4/23/2020'].pins,
-                        '4/24/2020', COLORS['4/24/2020'].pins,
-                        '#000000'
-                    ]
-                ]
-            ],
-        }
-    });
-    mainMap.map.addLayer({
-        'id': 'event-pins',
-        'type': 'circle',
-        'source': 'event-points',
-        'paint': {
-            'circle-radius': 6,
-            'circle-stroke-color': '#ffffff',
-            'circle-stroke-width': 3,
-            'circle-color': ['to-color',
-                ['case',
-                    ['boolean', ['feature-state', 'hover'], false],
-                    '#e7e7e7',
-                    ['match',
-                        ['get', 'eventDate'],
-                        '4/22/2020', COLORS['4/22/2020'].pins,
-                        '4/23/2020', COLORS['4/23/2020'].pins,
-                        '4/24/2020', COLORS['4/24/2020'].pins,
-                        '#000000'
-                    ]
-                ]
-            ],
-        }
-    });
+    mainMap.map.addLayer(EVENT_LAYER);
+    mainMap.map.addLayer(BACKGROUND_LAYER);
  
 
     numDone++;  

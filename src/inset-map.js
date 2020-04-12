@@ -5,9 +5,9 @@ function InsetMap(state, id, bounds, mainMap) {
     this.mainMap = mainMap;
 }
 
-InsetMap.prototype.setColors = MainMap.prototype.setColors;
+InsetMap.prototype.resetBounds = MainMap.prototype.resetBounds;
 
-InsetMap.prototype.setTypeFilters = function(filterBy) {
+InsetMap.prototype.setTypeFilters = function (filterBy) {
     var stateFilter = ['==', ['get', 'state'], this.state];
     var filterArray = ['all', stateFilter];
     var dayFilter = MainMap.getDayFilter();
@@ -29,58 +29,11 @@ InsetMap.prototype.setTypeFilters = function(filterBy) {
 
 InsetMap.prototype.addPointsLayer = function () {
     let thisInset = this;
-    this.map.loadImage('./pin_sdf.png', function (err, img) {
-        let imageName = this.state + 'pin'
-        thisInset.map.addImage(imageName, img, {sdf: true });
-        thisInset.map.addLayer({
-            'id': 'event-pins-background',
-            'type': 'circle',
-            'source': 'event-points',
-            'paint': {
-                'circle-radius': 10,
-                'circle-color': ['to-color',
-                    ['case',
-                        ['boolean', ['feature-state', 'hover'], false],
-                        '#e7e7e7',
-                        ['match',
-                            ['get', 'eventDate'],
-                            '4/22/2020', COLORS['4/22/2020'].pins,
-                            '4/23/2020', COLORS['4/23/2020'].pins,
-                            '4/24/2020', COLORS['4/24/2020'].pins,
-                            '#000000'
-                        ]
-                    ]
-                ],
-            }
-        });
-        thisInset.map.addLayer({
-            'id': 'event-pins',
-            'type': 'circle',
-            'source': 'event-points',
-            'paint': {
-                'circle-radius': 6,
-                'circle-stroke-color': '#ffffff',
-                'circle-stroke-width': 3,
-                'circle-color': ['to-color',
-                    ['case',
-                        ['boolean', ['feature-state', 'hover'], false],
-                        '#e7e7e7',
-                        ['match',
-                            ['get', 'eventDate'],
-                            '4/22/2020', COLORS['4/22/2020'].pins,
-                            '4/23/2020', COLORS['4/23/2020'].pins,
-                            '4/24/2020', COLORS['4/24/2020'].pins,
-                            '#000000'
-                        ]
-                    ]
-                ],
-            }
-        });
-        thisInset.map.setFilter('event-pins', ['==', ['get', 'state'], thisInset.state]);
-        numDone++;
-        MainMap.initFilters();
-
-    })
+    thisInset.map.addLayer(EVENT_LAYER);
+    thisInset.map.addLayer(BACKGROUND_LAYER);
+    thisInset.map.setFilter('event-pins', ['==', ['get', 'state'], thisInset.state]);
+    numDone++;
+    MainMap.initFilters();
 }
 
 InsetMap.prototype.init = function () {
@@ -117,10 +70,10 @@ InsetMap.prototype.init = function () {
     this.map.on('click', function (e) {
         hideInsets();
         mainMap.map.fitBounds(bounds, {
-                    easeTo: {
-                        duration: 0
-                    },
-                })
+            easeTo: {
+                duration: 0
+            },
+        })
 
     });
 }
