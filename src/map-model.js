@@ -46,6 +46,21 @@ MainMap.getTypeFilter = function () {
     return ['==', ['get', filterBy], true];
 }
 
+MainMap.prototype.makeZoomToNationalButton = function () {
+    document.querySelector('.mapboxgl-ctrl-compass').remove();
+    if (document.querySelector('.mapboxgl-ctrl-usa')) {
+        document.querySelector('.mapboxgl-ctrl-usa').remove();
+    }
+    var usaButton = document.createElement('button');
+    usaButton.className = 'mapboxgl-ctrl-icon mapboxgl-ctrl-usa';
+
+
+    usaButton.innerHTML = '<span class="usa-icon"></span>';
+
+    usaButton.addEventListener('click', () => this.resetView());
+    document.querySelector('.mapboxgl-ctrl-group').appendChild(usaButton);
+};
+
 MainMap.prototype.setTypeFilters = function () {
     var dayFilter = MainMap.getDayFilter();
     var filterByType = MainMap.getTypeFilter();
@@ -120,6 +135,7 @@ MainMap.prototype.addPointsLayer = function () {
 
 MainMap.prototype.resetView = function() {
     showInsets();
+    console.log(this)
     this.map.fitBounds(this.bounds, {
         duration: 2000
     });
@@ -165,6 +181,8 @@ MainMap.prototype.init = function () {
     ), {
         animate: false
     });
+
+    this.makeZoomToNationalButton();
 
     map.on('load', function () {
 
