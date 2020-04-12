@@ -1,6 +1,7 @@
 function MainMap(id, bounds) {
     this.mapId = id;
     this.bounds = bounds;
+    this.hoveredPopup = null;
 }
 
 MainMap.prototype.resetBounds = function (colors) {

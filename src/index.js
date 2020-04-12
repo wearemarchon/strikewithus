@@ -45,7 +45,6 @@ function setState(dayIdx) {
         buttons.forEach((button) => {
             button.classList.remove('active');
         })
-        console.log('all on')
         buttons[0].classList.add('active');
     } else {
         for(var i = 0; i < buttons.length; i++){
