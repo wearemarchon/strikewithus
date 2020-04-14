@@ -17,32 +17,11 @@ function showInsets() {
     })
 }
 
-function getMapColors(day) {
-    if (!day) {
-        return {
-            background: COLORS['all'].background,
-            foreground: COLORS['all'].us
-        }
-    }
-    return {
-        background: COLORS[day].background,
-        foreground: COLORS[day].us,
-    }
-}
-
-function setDay(dayIndex) {
-    var background,foreground;
-    var dayLookup = [
-        '4/22/2020',
-        '4/23/2020',
-        '4/24/2020'
-    ];
-    var day = dayLookup[dayIndex];
+function setDay() {
     allMaps.forEach(function(thisMap) {
-        let colors = getMapColors(day);
         if (thisMap.setTypeFilters) {
             thisMap.setTypeFilters();
-            thisMap.setColors(colors);
+            thisMap.resetBounds();
         }
     })
 }
@@ -52,7 +31,7 @@ var currentState = null;
 
 function setState(dayIdx) {
     if(dayIdx === currentState){
-        dayIdx = null;
+        return;
     }
     if (currentState) {
         document.getElementById('map').classList.remove(`day-${currentState}`);
@@ -66,7 +45,6 @@ function setState(dayIdx) {
         buttons.forEach((button) => {
             button.classList.remove('active');
         })
-        console.log('all on')
         buttons[0].classList.add('active');
     } else {
         for(var i = 0; i < buttons.length; i++){
