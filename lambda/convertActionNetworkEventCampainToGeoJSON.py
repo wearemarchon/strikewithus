@@ -90,7 +90,7 @@ def convert_event(event: Dict) -> Dict:
         'eventDate': parser.parse(event.get('start_date', '4/22/2020')).strftime('%-m/%-d/%Y'),
         'timestamp': event.get('start_date', '2020-04-22T00:00:00Z"'),
         'eventLink': event.get('browser_url', ''),
-        'venue': event.get('location').get('venue', ''),
+        'localStreamLink': event.get('location').get('venue', ''),
         'location': make_location(event),
         'state': make_state(event),
         'labor': check_host(event, 'labor'),
