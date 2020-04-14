@@ -47,6 +47,16 @@ h4 {
     width: 100vw;
 }
 
+.usa-icon {
+    width: 20px;
+    height: 20px;
+    margin: 5px;
+    background-image: url('./usa.svg');
+    background-size: 20px 20px;
+    background-repeat: no-repeat;
+    display: inline-block;
+}
+
 .hidden {
     display: none;
 }
@@ -63,29 +73,40 @@ h4 {
     background: linear-gradient(90deg, rgba(236,104,141,1) 0%, rgba(230,113,164,1) 35%, rgba(204,120,177,1) 65%, rgba(236,104,141,1) 100%);
 }
 
-.yellow-button {
-    color: #f7bf3b;
-    background: transparent;
-}
-.cyan-button {
-    color: #69c6b0;
-    background: transparent;
-}
-.orange-button {
-    color: #f76c36;
+.multi-button {
+    color:white;
     background: transparent;
 }
 
-.yellow-button.active {
-    background: #f7bf3b;
+.peach-button {
+    color:white;
+    background: transparent;
+}
+.green-button {
+    color: white;
+    background: transparent;
+}
+.pink-button {
+    color: white;
+    background: transparent;
+}
+
+.multi-button.active {
+    color: white;
+    background: linear-gradient(90deg, rgba(136, 198, 86, 1) 0%, rgba(203, 219, 42, 1) 20%, rgba(248, 210, 51, 1) 50%, rgba(244, 125, 80, 1) 80%, rgba(242, 97, 70, 1) 100%);
+
+}
+
+.peach-button.active {
+    background: linear-gradient(90deg, rgba(242, 97, 70, 1) 0%, rgba(251, 114, 44, 1) 35%, rgba(246, 91, 90, 1) 65%, rgba(248, 83, 113, 1) 100%);
     color: white;
 }
-.cyan-button.active {
-    background: #69c6b0;
+.green-button.active {
+    background: linear-gradient(90deg, rgba(136, 198, 86, 1) 0%, rgba(195, 180, 73, 1) 35%, rgba(149, 196, 80, 1) 65%, rgba(136, 198, 86, 1) 100%);
     color: white;
 }
-.orange-button.active {
-    background: #f76c36;
+.pink-button.active {
+    background: linear-gradient(90deg, rgba(236, 104, 141, 1) 0%, rgba(230, 113, 164, 1) 35%, rgba(204, 120, 177, 1) 65%, rgba(236, 104, 141, 1) 100%);
     color: white;
 }
 
@@ -157,9 +178,6 @@ h4 {
     margin-right: 10px;
     box-sizing: content-box;
 }
-.day-3 .inset {
-    border: 1px solid #4d4d4d;
-}
 
 .inset .mapboxgl-control-container{
     display: none;
@@ -174,7 +192,6 @@ h4 {
     justify-content: space-evenly;
     width: 100%;
     color: white;
-    border: 6px solid var(--dark-purple);
     box-sizing: border-box;
 }
 
@@ -186,17 +203,30 @@ h4 {
 .filter-bar .filter-item {
     width: 100%;
     text-align: center;
+    padding: 20px 0;
+    margin-right: 6px
+}
+
+.filter-bar .date-button:last-of-type {
+    border-right: none;
+}
+
+.filter-bar .date-button:first-of-type {
+    border-left: 0.5px solid var(--light-purple);
 }
 
 .filter-bar .date-button {
     cursor: pointer;
-    /* filter: saturate(0.5); */
+    border-right: 0.5px solid var(--light-purple);
+    border-top: 6px solid var(--dark-purple);
+    border-bottom: 6px solid var(--dark-purple);
 }
+
 .filter-bar .date-button.active {
-    width: 100%;
-    text-align: center;
-    filter: saturate(1.0);
+    border-right-color: var(--dark-purple);
+    border-left-color: var(--dark-purple);
 }
+
 @media screen and (max-width: 700px) {
     div.content {
         height: 92%!important;

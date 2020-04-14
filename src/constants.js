@@ -1,23 +1,6 @@
 var COLORS = {
-    'all' :{
-        background: '#b3b3b3',
-        us: '#ffffff',
-    },
-    '4/22/2020': {
-        background: '#69c6b0',
-        us: '#ffffff',
-        pins: '#69c6b0'
-    },
-    '4/23/2020': {
-        background: '#f7bf3b',
-        us: '#f7f7f7',
-        pins: '#f7bf3b'
-    },
-    '4/24/2020': {
-        background: '#f76c36',
-        us: '#f7f7f7',
-        pins: '#f76c36'
-    }
+    pinColor: '#463057',
+    hoverColor: '#f26948',
 };
 
 let bBoxes = {
@@ -53,3 +36,35 @@ var referrer = urlParams.get('referral');
 var initialDay = queryDay > 0 && queryDay <= 3 ? queryDay : null;
 
 var DEFAULT_DAY = '4/22/2020';
+
+var EVENT_LAYER = {
+    'id': 'event-pins-background',
+    'type': 'circle',
+    'source': 'event-points',
+    'paint': {
+        'circle-radius': 10,
+        'circle-color': ['case',
+            ['boolean', ['feature-state', 'hover'], false],
+            COLORS.hoverColor,
+            COLORS.pinColor,
+
+        ],
+    }
+}
+
+var BACKGROUND_LAYER = {
+    'id': 'event-pins',
+    'type': 'circle',
+    'source': 'event-points',
+    'paint': {
+        'circle-radius': 6,
+        'circle-stroke-color': '#ffffff',
+        'circle-stroke-width': 3,
+        'circle-color': ['case',
+            ['boolean', ['feature-state', 'hover'], false],
+            COLORS.hoverColor,
+            COLORS.pinColor,
+
+        ],
+    }
+}

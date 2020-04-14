@@ -1,18 +1,11 @@
 function MainMap(id, bounds) {
     this.mapId = id;
     this.bounds = bounds;
+    this.hoveredPopup = null;
 }
 
-MainMap.prototype.setColors = function (colors) {
-    // Update background
-    this.map.setPaintProperty('background', 'background-color', colors.background);
-    // Update pins
-    // Update polygon color
-    this.map.setPaintProperty('us-polygon', 'fill-color', colors.foreground);
-    this.map.setPaintProperty('us-territories', 'fill-color', colors.foreground);
-    this.map.fitBounds(this.bounds, {
-        duration: 2000
-    });
+MainMap.prototype.resetBounds = function (colors) {
+    this.resetView();
 }
 
 MainMap.initFilters = function() {
@@ -46,6 +39,21 @@ MainMap.getTypeFilter = function () {
     return ['==', ['get', filterBy], true];
 }
 
+MainMap.prototype.makeZoomToNationalButton = function () {
+    document.querySelector('.mapboxgl-ctrl-compass').remove();
+    if (document.querySelector('.mapboxgl-ctrl-usa')) {
+        document.querySelector('.mapboxgl-ctrl-usa').remove();
+    }
+    var usaButton = document.createElement('button');
+    usaButton.className = 'mapboxgl-ctrl-icon mapboxgl-ctrl-usa';
+
+
+    usaButton.innerHTML = '<span class="usa-icon"></span>';
+
+    usaButton.addEventListener('click', () => this.resetView());
+    document.querySelector('.mapboxgl-ctrl-group').appendChild(usaButton);
+};
+
 MainMap.prototype.setTypeFilters = function () {
     var dayFilter = MainMap.getDayFilter();
     var filterByType = MainMap.getTypeFilter();
@@ -68,52 +76,8 @@ MainMap.prototype.setTypeFilters = function () {
 
 MainMap.prototype.addPointsLayer = function () {
     let mainMap = this;
-    mainMap.map.addLayer({
-        'id': 'event-pins-background',
-        'type': 'circle',
-        'source': 'event-points',
-        'paint': {
-            'circle-radius': 10,
-            'circle-color': ['to-color',
-                ['case',
-                    ['boolean', ['feature-state', 'hover'], false],
-                    '#e7e7e7',
-                    ['match',
-                        ['get', 'eventDate'],
-                        '4/22/2020', COLORS['4/22/2020'].pins,
-                        '4/23/2020', COLORS['4/23/2020'].pins,
-                        '4/24/2020', COLORS['4/24/2020'].pins,
-                        '#000000'
-                    ]
-                ]
-            ],
-        }
-    });
-    mainMap.map.addLayer({
-        'id': 'event-pins',
-        'type': 'circle',
-        'source': 'event-points',
-        'paint': {
-            'circle-radius': 6,
-            'circle-stroke-color': '#ffffff',
-            'circle-stroke-width': 3,
-            'circle-color': ['to-color',
-                ['case',
-                    ['boolean', ['feature-state', 'hover'], false],
-                    '#e7e7e7',
-                    ['match',
-                        ['get', 'eventDate'],
-                        '4/22/2020', COLORS['4/22/2020'].pins,
-                        '4/23/2020', COLORS['4/23/2020'].pins,
-                        '4/24/2020', COLORS['4/24/2020'].pins,
-                        '#000000'
-                    ]
-                ]
-            ],
-        }
-    });
- 
-
+    mainMap.map.addLayer(EVENT_LAYER);
+    mainMap.map.addLayer(BACKGROUND_LAYER);
     numDone++;  
     MainMap.initFilters();
 }
@@ -121,7 +85,13 @@ MainMap.prototype.addPointsLayer = function () {
 MainMap.prototype.resetView = function() {
     showInsets();
     this.map.fitBounds(this.bounds, {
-        duration: 2000
+        duration: 1000,
+        padding: {
+            top: 20,
+            bottom: 150,
+            right: 0,
+            left: 0,
+        },
     });
 }
 
@@ -163,8 +133,16 @@ MainMap.prototype.init = function () {
         new mapboxgl.LngLat(-127.119844, 25.393099),
         new mapboxgl.LngLat(-64.920107, 50.095843)
     ), {
-        animate: false
+        animate: false,
+        padding: {
+            top: 20,
+            bottom: 150,
+            right: 0,
+            left: 0,
+        },
     });
+
+    this.makeZoomToNationalButton();
 
     map.on('load', function () {
 
