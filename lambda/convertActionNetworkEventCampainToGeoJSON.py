@@ -61,7 +61,7 @@ def make_coord(event: Dict) -> list:
     lat = coords.get('latitude')
     lng = coords.get('longitude')
     return [lng, lat]
-    
+
 def check_host(event: Dict, kind: str):
     description = event.get('description')
     if (kind == "faith") and ("**FAITH EVENT**" in description):
@@ -90,6 +90,7 @@ def convert_event(event: Dict) -> Dict:
         'eventDate': parser.parse(event.get('start_date', '4/22/2020')).strftime('%-m/%-d/%Y'),
         'timestamp': event.get('start_date', '2020-04-22T00:00:00Z"'),
         'eventLink': event.get('browser_url', ''),
+        'venue': event.get('location').get('venue', ''),
         'location': make_location(event),
         'state': make_state(event),
         'labor': check_host(event, 'labor'),
