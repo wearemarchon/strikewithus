@@ -21,7 +21,7 @@ def upload(dataset, filename, dry_run):
         'features': dataset
     }
     if dry_run:
-        print(data)
+        print('')
     else:
         s3 = boto3.resource('s3')
         response = s3.Object('usclimatestrike', filename).put(
@@ -44,6 +44,7 @@ def is_us(event: Dict) -> bool:
 
 def make_location(event: Dict) -> str:
     location = (event.get('location', {}) or {})
+    print(location)
     # need to update to handle null values
     full_location = '{address}, {locality}, {region} {postal_code}'.format(
         address=safestrip(location.get('address_lines')[0]),
@@ -103,6 +104,7 @@ def convert_event(event: Dict) -> Dict:
         'localStreamLink': parse_location_data(event, 'venue'),
         'location': make_location(event),
         'state': parse_location_data(event, 'region'),
+        'city': parse_location_data(event, 'locality'),
         'zipCode':  parse_location_data(event, 'postal_code'),
         'labor': check_host(event, 'labor'),
         'faith': check_host(event, 'faith'),
