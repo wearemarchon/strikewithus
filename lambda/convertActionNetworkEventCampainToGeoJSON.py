@@ -61,7 +61,7 @@ def make_coord(event: Dict) -> list:
     lat = coords.get('latitude')
     lng = coords.get('longitude')
     return [lng, lat]
-    
+
 def check_host(event: Dict, kind: str):
     description = event.get('description')
     if (kind == "faith") and ("**FAITH EVENT**" in description):
