@@ -53,9 +53,9 @@ def make_location(event: Dict) -> str:
     )
     return full_location
 
-def parse_location_data(event: Dict, data: str) -> str:
-    location = (event.get('location', {}) or {})
-    return safestrip(location.get(data))
+def parse_location_data(event_data: Dict, data_key: str) -> str:
+    location = (event_data.get('location', {}) or {})
+    return safestrip(location.get(data_key))
 
 def make_coord(event: Dict) -> list:
     location = (event.get('location', {}) or {})
@@ -89,7 +89,7 @@ def convert_event(event: Dict) -> Dict:
 
     Note: local event hosts are using the "venue" location field to store the URL where someone can watch their event.
     This is being extracted and sent to the client as "localStreamLink" and is a deliberate use of Action Network's
-    fields. It is distinct from the "eventLink" that provides a form for people to signup for the evvent.
+    fields. It is distinct from the "eventLink" that provides a form for people to signup for the event.
     """
     coord = make_coord(event)
     return {
