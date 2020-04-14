@@ -51,9 +51,9 @@ def make_location(event: Dict) -> str:
         )
     return full_location
 
-def make_state(event: Dict) -> str:
+def parse_location_data(event: Dict, data: str) -> str
     location = (event.get('location', {}) or {})
-    return safestrip(location.get('region'))
+    return safestrip(location.get(data))
 
 def make_coord(event: Dict) -> list:
     location = (event.get('location', {}) or {})
@@ -90,9 +90,9 @@ def convert_event(event: Dict) -> Dict:
         'eventDate': parser.parse(event.get('start_date', '4/22/2020')).strftime('%-m/%-d/%Y'),
         'timestamp': event.get('start_date', '2020-04-22T00:00:00Z"'),
         'eventLink': event.get('browser_url', ''),
-        'localStreamLink': safestrip(event.get('location').get('venue', '')),
+        'localStreamLink': parse_location_data(event, 'venue'),
         'location': make_location(event),
-        'state': make_state(event),
+        'state': parse_location_data(event, 'region'),
         'labor': check_host(event, 'labor'),
         'faith': check_host(event, 'faith'),
         'showcase': check_host(event, 'showcase')
