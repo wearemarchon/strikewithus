@@ -45,13 +45,15 @@ def is_us(event: Dict) -> bool:
 def make_location(event: Dict) -> str:
     location = (event.get('location', {}) or {})
     # need to update to handle null values
-    full_location = '{venue}, {address}, {locality}, {region} {postal_code}'.format(
-        venue = safestrip(location.get('venue')), address = safestrip(location.get('address_lines')[0]), locality = safestrip(location.get('locality')),
-        region = safestrip(location.get('region')), postal_code = safestrip(location.get('postal_code'))
-        )
+    full_location = '{address}, {locality}, {region} {postal_code}'.format(
+        address=safestrip(location.get('address_lines')[0]),
+        locality=safestrip(location.get('locality')),
+        region=safestrip(location.get('region')),
+        postal_code=safestrip(location.get('postal_code'))
+    )
     return full_location
 
-def parse_location_data(event: Dict, data: str) -> str
+def parse_location_data(event: Dict, data: str) -> str:
     location = (event.get('location', {}) or {})
     return safestrip(location.get(data))
 
@@ -80,7 +82,15 @@ def make_id(event: Dict) -> str:
     event_id = event_id + 1
     return event_id
 
+
+
 def convert_event(event: Dict) -> Dict:
+    """Builds the JSON object used by the client to render information in the map.
+
+    Note: local event hosts are using the "venue" location field to store the URL where someone can watch their event.
+    This is being extracted and sent to the client as "localStreamLink" and is a deliberate use of Action Network's
+    fields. It is distinct from the "eventLink" that provides a form for people to signup for the evvent.
+    """
     coord = make_coord(event)
     return {
       "type": "Feature",
@@ -93,6 +103,7 @@ def convert_event(event: Dict) -> Dict:
         'localStreamLink': parse_location_data(event, 'venue'),
         'location': make_location(event),
         'state': parse_location_data(event, 'region'),
+        'zipCode':  parse_location_data(event, 'postal_code'),
         'labor': check_host(event, 'labor'),
         'faith': check_host(event, 'faith'),
         'showcase': check_host(event, 'showcase')
