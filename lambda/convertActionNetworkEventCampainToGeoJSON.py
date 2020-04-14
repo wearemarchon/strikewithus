@@ -21,7 +21,7 @@ def upload(dataset, filename, dry_run):
         'features': dataset
     }
     if dry_run:
-        print('')
+        print(data)
     else:
         s3 = boto3.resource('s3')
         response = s3.Object('usclimatestrike', filename).put(
@@ -44,7 +44,6 @@ def is_us(event: Dict) -> bool:
 
 def make_location(event: Dict) -> str:
     location = (event.get('location', {}) or {})
-    print(location)
     # need to update to handle null values
     full_location = '{address}, {locality}, {region} {postal_code}'.format(
         address=safestrip(location.get('address_lines')[0]),
