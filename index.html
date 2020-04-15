@@ -9,213 +9,7 @@
     <link rel="stylesheet" href="https://use.typekit.net/xlp1efb.css">
     <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.2/mapbox-gl-geocoder.min.js"></script>
     <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.2/mapbox-gl-geocoder.css" type="text/css"/>
-    <style>
-        :root {
-            --dark-purple:#240e34;
-            --med-purple:#321b43;
-            --purple:#463057;
-            --light-purple:#9086b6;
-            --yellow: #ffde16;
-            --red: #f00004;
-            --cyan: #69c6b0;
-            --background: --dark-purple;
-        }
-        body { margin: 0; padding: 0; background-color: var(--dark-purple);}
-        html, body, #map { height: 100%; }
-        body {
-            font-family: neue-haas-grotesk-display, sans-serif;
-            font-style: normal;
-            font-weight: 100;
-        }
-        h1 { 
-            font-family: titling-gothic-fb, sans-serif;
-            font-size: 73px;
-        }
-        h2 {
-            font-family: titling-gothic-fb, sans-serif;
-            font-size: 66px;
-        }
-        h3 {
-            font-family: titling-gothic-fb, sans-serif;
-            text-transform: uppercase;
-            font-size: 18px;
-        }
-        h4 {
-            font-family: neue-haas-grotesk-display, sans-serif;
-            font-style: normal;
-            font-weight: 100;
-        }
-        .main {
-            display: flex;
-            flex-flow: row;
-            height: 100vh;
-        }
-        .map-container {
-            display: flex;
-            flex-flow: column;
-            height: 100vh;
-        }
-        #map {
-            width: 100vw;
-        }
-   
-        .hidden {
-            display: none;
-        }
-        .multi-gradient {
-            background: linear-gradient(90deg, rgba(136,198,86,1) 0%, rgba(203,219,42,1) 20%, rgba(248,210,51,1) 50%,  rgba(244,125,80,1) 80%, rgba(242,97,70,1) 100%);
-        }
-        .peach-gradient {
-            background: linear-gradient(90deg, rgba(242,97,70,1) 0%, rgba(251,114,44,1) 35%, rgba(246,91,90,1) 65%, rgba(248,83,113,1) 100%);
-        }
-        .green-gradient {
-            background: linear-gradient(90deg, rgba(136,198,86,1) 0%, rgba(195,180,73,1) 35%, rgba(149,196,80,1) 65%, rgba(136,198,86,1) 100%);
-        }
-        .pink-gradient {
-            background: linear-gradient(90deg, rgba(236,104,141,1) 0%, rgba(230,113,164,1) 35%, rgba(204,120,177,1) 65%, rgba(236,104,141,1) 100%);
-        }
-
-        .yellow-button {
-            color: #f7bf3b;
-            background: transparent;
-        }
-        .cyan-button {
-            color: #69c6b0;
-            background: transparent;
-        }
-        .orange-button {
-            color: #f76c36;
-            background: transparent;
-        }
-
-        .yellow-button.active {
-            background: #f7bf3b;
-            color: white;
-        }
-        .cyan-button.active {
-            background: #69c6b0;
-            color: white;
-        }
-        .orange-button.active {
-            background: #f76c36;
-            color: white;
-        }
-
-        .mapboxgl-popup-tip {
-            visibility: hidden;
-        }
-        .mapboxgl-popup-content {
-            background: rgb(242, 242, 242);
-            box-shadow: 2px 2px 5px;
-            border-radius: 0px;
-        }
-        .filters {
-            position: absolute;
-            top: 62px;
-            z-index: 1;
-            left: 10px;
-            display: flex;
-            justify-content: flex-end;
-            flex-flow: row wrap;
-            padding: 2px;
-            background: #ffffffbd;
-            border-radius: 5px;
-        }
-        .filters .checkbox-container {
-            position: relative;
-            margin: auto 10px;
-        }
-        .filters label {
-            margin-left: calc(1em + 4px);
-            cursor: pointer;
-        }
-        .filters label::before {
-            content: '';
-            border-radius: 100%;
-            width: calc(1em + 2px);
-            height: calc(1em + 2px);
-            display: block;
-            box-sizing: border-box;
-            border-radius: 0;
-            border: 1px solid #000000;
-            position: absolute;
-            left: 0;
-            top: 2px;
-            background-color: transparent;
-        }
-
-        .filters label.active::before {
-            background-color: #000000;
-
-        }
-
-        .map-overlay {
-            position: absolute;
-            bottom: 10px;
-            display: flex;
-            flex-flow: row wrap;
-            justify-content: space-between;
-            align-items: flex-start;
-            font-family: Arial, sans-serif;
-            overflow: auto;
-            z-index: 1;
-        }
-        .inset {
-            width: 230px;
-            flex: 1;
-            height:150px;
-            border:1px solid #fff;
-            margin-left: 10px;
-            margin-right: 10px;
-            box-sizing: content-box;
-        }
-        .day-3 .inset {
-            border: 1px solid #4d4d4d;
-        }
-
-        .inset .mapboxgl-control-container{
-            display: none;
-        }
-        .mapboxgl-popup {
-            z-index: 3000;
-        }
-
-        .filter-bar {
-            display: flex;
-            background: var(--dark-purple);
-            justify-content: space-evenly;
-            width: 100%;
-            color: white;
-            border: 6px solid var(--dark-purple);
-            box-sizing: border-box;
-        }
-
-        /* .filter-bar a:hover:not(.active) {
-            background-color: #555;
-            color: white;
-        } */
-
-        .filter-bar .filter-item {
-            width: 100%;
-            text-align: center;
-        }
-
-        .filter-bar .date-button {
-            cursor: pointer;
-            /* filter: saturate(0.5); */
-        }
-        .filter-bar .date-button.active {
-            width: 100%;
-            text-align: center;
-            filter: saturate(1.0);
-        }
-        @media screen and (max-width: 700px) {
-            div.content {
-                height: 92%!important;
-                margin-left: 0;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="main.css" type="text/css" />
 </head>
 
 <body>
@@ -223,10 +17,10 @@
         <div class="map-container">
             <div class='filter-bar'>
                 <div  class="filter-item"><h3>FILTER BY:</h3></div>
-                <a id='all-events' class="filter-item date-button multi-gradient active" onclick="setState(null)"><h3>All Events</h3></a>
-                <a id='day1Btn' class="filter-item date-button cyan-button" onclick="setState(1)"><h3>April 22nd</h3></a>
-                <a id='day2Btn' class="filter-item date-button yellow-button" onclick="setState(2)"><h3>April 23rd</h3></a>
-                <a id='day3Btn' class="filter-item date-button orange-button" onclick="setState(3)"><h3>April 24th</h3></a>
+                <a id='all-events' class="filter-item date-button multi-button active" onclick="setState(null)"><h3>All Events</h3></a>
+                <a id='day1Btn' class="filter-item date-button peach-button" onclick="setState(1)"><h3>April 22nd</h3></a>
+                <a id='day2Btn' class="filter-item date-button green-button" onclick="setState(2)"><h3>April 23rd</h3></a>
+                <a id='day3Btn' class="filter-item date-button pink-button" onclick="setState(3)"><h3>April 24th</h3></a>
             </div>
             <div id='map' class='content'>
                 <!-- <div class="filters">
@@ -242,7 +36,7 @@
                         <label for="labor" class="filter-label active" onclick="toggleFilter('labor', this)">
                             LABOR
                         </label>
-                    </div> 
+                    </div>
                     <div class="checkbox-container">
                         <input id="faith" name="type-filter" class="type-filter" type="checkbox" hidden  />
                         <label for="faith" class="filter-label active" onclick="toggleFilter('faith', this)">
@@ -261,7 +55,7 @@
                     <div id='hi-inset' class="inset"></div>
                     <div id='pr-inset' class="inset"></div>
                     <div id='gu-inset' class="inset"></div>
-            
+
                 </div>
             </div>
         </div>
@@ -270,155 +64,10 @@
         </div>
     </main>
 
-<script src='https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js'></script>
-<script src="./constants.js" ></script>
-<script src="./map-model.js"></script>
-<script src="./inset-map.js"></script>
-
-<script>
-mapboxgl.accessToken = 'pk.eyJ1Ijoid2VhcmVtYXJjaG9uIiwiYSI6ImNqdTFscXo3ZzAwYTE0ZWxzMWhrNnVtNHIifQ.ql7OysgSLnCazbiXZt8NFA';
-
-var allMaps = [];
-var filterBy = null;
-
-function hideInsets() {
-    var insets = Array.from(document.getElementsByClassName('inset'));
-    insets.forEach(function(ele) {
-        ele.classList.add('hidden')
-    })
-}
-
-function showInsets() {
-    var insets = Array.from(document.getElementsByClassName('inset'));
-    insets.forEach(function (ele) {
-        ele.classList.remove('hidden')
-    })
-}
-
-function getMapColors(day) {
-    if (!day) {
-        return {
-            background: COLORS['all'].background,
-            foreground: COLORS['all'].us
-        }
-    }
-    return {
-        background: COLORS[day].background,
-        foreground: COLORS[day].us,
-    }
-}
-
-function setDay(dayIndex) {
-    var background,foreground;
-    var dayLookup = [
-        '4/22/2020',
-        '4/23/2020',
-        '4/24/2020'
-    ];
-    var day = dayLookup[dayIndex];
-    allMaps.forEach(function(thisMap) {
-        let colors = getMapColors(day);
-        if (thisMap.setTypeFilters) {
-            thisMap.setTypeFilters();
-            thisMap.setColors(colors);
-        }
-    })
-}
-
-var buttons = Array.from(document.getElementsByClassName('date-button'));
-var currentState = null;
-
-function setState(dayIdx) {
-    if(dayIdx === currentState){
-        dayIdx = null;
-    }
-    if (currentState) {
-        document.getElementById('map').classList.remove(`day-${currentState}`);
-    }
-    if (dayIdx) {
-        document.getElementById('map').classList.add(`day-${dayIdx}`);
-    }
-
-    var dayIndex = dayIdx - 1;
-    if (!dayIdx) {
-        buttons.forEach((button) => {
-            button.classList.remove('active');
-        })
-        console.log('all on')
-        buttons[0].classList.add('active');
-    } else {
-        for(var i = 0; i < buttons.length; i++){
-            if(dayIdx == i){
-                buttons[i].classList.add('active');
-            } else {
-                buttons[i].classList.remove('active');
-            }
-        }
-    }
-    currentState = dayIdx;
-    showInsets();
-    setDay(dayIndex);
-}
-
-function toggleFilter(type, ele) {
-    Array.from(document.getElementsByClassName('filter-label')).forEach(function(ele) {
-        ele.classList.remove('active');
-    })
-   
-    ele.classList.add('active');
-    
-    filterBy = type === 'all' ? null : type;
-    
-    allMaps.forEach(function (thisMap) {
-        if (thisMap.setTypeFilters) {
-            thisMap.setTypeFilters();
-        }
-    })
-}
-
-function markerHtml(e){
-    var coordinates = e.features[0].geometry.coordinates.slice();
-    var name = e.features[0].properties.name;
-    var link = e.features[0].properties.eventLink+'';
-    var location = e.features[0].properties.location;
-    var dateString = e.features[0].properties.timestamp;
-    var date = new Date(dateString);
-
-    var timeDelimiter = dateString.indexOf('T') + 1;
-    var hours = parseInt(dateString.substring(timeDelimiter, timeDelimiter + 2));
-    var mins = dateString.substring(timeDelimiter + 3, timeDelimiter + 5);
-
-    var ampm = hours >= 12 && hours !== 0 ? 'PM' : 'AM';
-    if(hours > 12) {
-        hours -= 12;
-    }
-    if(hours === 0){
-        hours = 12;
-    }
-    var split = location.split(',');
-    var locationName = split[0].trim();
-    var locationAddress = split.slice(1, split.length - 2).join(',').trim();
-    var locationState = split.slice(split.length - 2, split.length).join(',').trim();
-
-    var formattedDate = date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'}) + ' ' + hours +':'+ mins+ ' '+ampm;
-    return '<a target="_blank" href='+link+(referrer ? "?source="+referrer+"&referrer="+referrer : "" )+'><strong>'+name.toUpperCase()+'</strong></a><br><i>'+formattedDate+'</i><br>'+locationName+'<br>'+locationAddress+'<br>'+locationState;
-}
-
-var numDone = 0;
-var totalMaps = 5;
-function drawMaps() {
-    const states = ['AK', 'HI', 'PR', 'GU'];
-    let mainMap = new MainMap('map', [-127.119844, 25.393099, -64.920107, 50.095843]);
-    states.forEach(function(state) {
-        let inset = new InsetMap(state, `${state.toLowerCase()}-inset`, bBoxes[state], mainMap);
-        inset.init();
-        allMaps.push(inset);
-    })
-    mainMap.init();
-    allMaps.push(mainMap);
-}
-
-drawMaps();
-</script>
+<script src='https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js' type="text/javascript"></script>
+<script src="./constants.js" type="text/javascript"></script>
+<script src="./map-model.js" type="text/javascript"></script>
+<script src="./inset-map.js" type="text/javascript"></script>
+<script src="./index.js" type="text/javascript"></script>
 </body>
 </html>
