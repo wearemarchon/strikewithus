@@ -45,15 +45,17 @@ def is_us(event: Dict) -> bool:
 def make_location(event: Dict) -> str:
     location = (event.get('location', {}) or {})
     # need to update to handle null values
-    full_location = '{venue}, {address}, {locality}, {region} {postal_code}'.format(
-        venue = safestrip(location.get('venue')), address = safestrip(location.get('address_lines')[0]), locality = safestrip(location.get('locality')),
-        region = safestrip(location.get('region')), postal_code = safestrip(location.get('postal_code'))
-        )
+    full_location = '{address}, {locality}, {region} {postal_code}'.format(
+        address=safestrip(location.get('address_lines')[0]),
+        locality=safestrip(location.get('locality')),
+        region=safestrip(location.get('region')),
+        postal_code=safestrip(location.get('postal_code'))
+    )
     return full_location
 
-def make_state(event: Dict) -> str:
-    location = (event.get('location', {}) or {})
-    return safestrip(location.get('region'))
+def parse_location_data(event_data: Dict, data_key: str) -> str:
+    location = (event_data.get('location', {}) or {})
+    return safestrip(location.get(data_key))
 
 def make_coord(event: Dict) -> list:
     location = (event.get('location', {}) or {})
@@ -80,7 +82,15 @@ def make_id(event: Dict) -> str:
     event_id = event_id + 1
     return event_id
 
+
+
 def convert_event(event: Dict) -> Dict:
+    """Builds the JSON object used by the client to render information in the map.
+
+    Note: local event hosts are using the "venue" location field to store the URL where someone can watch their event.
+    This is being extracted and sent to the client as "localStreamLink" and is a deliberate use of Action Network's
+    fields. It is distinct from the "eventLink" that provides a form for people to signup for the event.
+    """
     coord = make_coord(event)
     return {
       "type": "Feature",
@@ -90,8 +100,11 @@ def convert_event(event: Dict) -> Dict:
         'eventDate': parser.parse(event.get('start_date', '4/22/2020')).strftime('%-m/%-d/%Y'),
         'timestamp': event.get('start_date', '2020-04-22T00:00:00Z"'),
         'eventLink': event.get('browser_url', ''),
+        'localStreamLink': parse_location_data(event, 'venue'),
         'location': make_location(event),
-        'state': make_state(event),
+        'state': parse_location_data(event, 'region'),
+        'city': parse_location_data(event, 'locality'),
+        'zipCode':  parse_location_data(event, 'postal_code'),
         'labor': check_host(event, 'labor'),
         'faith': check_host(event, 'faith'),
         'showcase': check_host(event, 'showcase')
