@@ -18,6 +18,7 @@ function showInsets() {
 }
 
 function setDay() {
+
     allMaps.forEach(function(thisMap) {
         if (thisMap.setTypeFilters) {
             thisMap.setTypeFilters();

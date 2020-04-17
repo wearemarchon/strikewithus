@@ -31,12 +31,48 @@ let makeCard = (event) => {
             ${event.localStreamLink ? `<div class="link-button"><a href="${event.localStreamLink}">Stream</a></div>` : ''}
         </div>
        
-    </div>`}
+    </div>`
+}
 
 let makeList = (events) => events.map((event) => makeCard(event));
 
+let getEventsForDate = () => {
+    var dayLookupIndexed = [
+        null,
+        '4/22/2020',
+        '4/23/2020',
+        '4/24/2020'
+    ]; // currentState is 1 indexed not 0 indexed
+    let day = dayLookupIndexed[currentState];
+
+    let filteredEvents = allEvents.filter((event) => {
+        if (day) {
+            return event.eventDate === day;
+
+        }
+        return true;
+    })
+    return filteredEvents;
+
+}
+
+let getEventsForDateMem = (() => {
+    let cache = {};
+    return () => {
+        if (cache[currentState]) {
+            return cache[currentState];
+        } else {
+            let result = getEventsForDate();
+            cache[currentState] = result;
+            return result;
+        }
+    }
+})();
+
+
 let getEvents = (searchedLocation) => {
-    return allEvents.filter((event) => {
+    let filteredForDay = getEventsForDateMem();
+    return filteredForDay.filter((event) => {
         let stateName = ABR_TO_NAME[event.state];
         if (searchedLocation.city) {
             return event.city === searchedLocation.city && stateName === searchedLocation.state;

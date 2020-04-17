@@ -84,8 +84,8 @@ MainMap.prototype.addPointsLayer = function () {
 
 MainMap.prototype.resetView = function() {
     showInsets();
-    renderAllEvents();
-
+    let events = getEventsForDateMem();
+    renderList(events);
     this.map.fitBounds(this.bounds, {
         duration: 1000,
         padding: {
