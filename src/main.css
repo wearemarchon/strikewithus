@@ -9,7 +9,7 @@
     --background: --dark-purple;
 }
 body { margin: 0; padding: 0; background-color: var(--dark-purple);}
-html, body, #map { height: 100%; }
+html, body { height: 100%; width: 100%;}
 body {
     font-family: neue-haas-grotesk-display, sans-serif;
     font-style: normal;
@@ -32,21 +32,47 @@ h4 {
     font-family: neue-haas-grotesk-display, sans-serif;
     font-style: normal;
     font-weight: 100;
+    font-size: 20px;
 }
 .main {
     display: flex;
     flex-flow: row;
     height: 100vh;
+    width: 100vw;
 }
+
+.unstyled-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
 .map-container {
     display: flex;
     flex-flow: column;
     height: 100vh;
+    flex: 1 1 70%;
 }
 #map {
-    width: 100vw;
+    height: 100%;
 }
 
+.sidebar {
+    flex: 1 1 30%;
+    max-width: 30%;
+    overflow-x: hidden;
+}
+
+.event-card {
+    background-color: var(--purple);
+    color: white;
+    padding: 10px;
+    border-bottom: 0.5px solid var(--light-purple);
+}
+
+.link-button {
+    
+}
 .usa-icon {
     width: 20px;
     height: 20px;
@@ -190,7 +216,6 @@ h4 {
     display: flex;
     background: var(--dark-purple);
     justify-content: space-evenly;
-    width: 100%;
     color: white;
     box-sizing: border-box;
 }

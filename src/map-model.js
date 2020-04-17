@@ -84,6 +84,8 @@ MainMap.prototype.addPointsLayer = function () {
 
 MainMap.prototype.resetView = function() {
     showInsets();
+    renderAllEvents();
+
     this.map.fitBounds(this.bounds, {
         duration: 1000,
         padding: {
@@ -118,7 +120,23 @@ MainMap.prototype.init = function () {
         .on('clear', function(result) {
             me.resetView();
         })
-        .on('result', function (result) {
+        .on('result', function (returned) {
+            let result = returned.result;
+            let type = result.place_type[0];
+            let searchLocation = {
+                state: '',
+                city: ''
+            }
+            if (type === 'region') {
+                searchLocation.state = result.text;
+            } else if (type === 'place') {
+                searchLocation.city = result.text;
+                searchLocation.state = STATE_NAMES.find((stateName) => result.place_name.includes(stateName))
+            } else if (type === 'postcode') {
+                searchLocation.city = result.place_name.split(',')[0];
+                searchLocation.state = STATE_NAMES.find((stateName) => result.place_name.includes(stateName))
+            }
+            renderSearchResults(searchLocation)
             hideInsets();
         }),
         'top-left'
@@ -160,6 +178,8 @@ MainMap.prototype.init = function () {
         map.on('click', 'event-pins', function (e) {
             if (e.features.length > 0) {
                 var coordinates = e.features[0].geometry.coordinates.slice();
+                let event = e.features[0].properties;
+                renderList([event])
                 hideInsets();
                 map.flyTo({
                     center: coordinates,
