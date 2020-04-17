@@ -111,14 +111,14 @@ function markerHtml(e){
     var locationName = split[0].trim();
     var formattedDate = formatDataTime(event);
 
-    return `<div>
+    return `<div class="map-popup">
         <h4>${name.toUpperCase()}</h4>
             <ul class="unstyled-list">
                 <li>${formattedDate}</li>
                 <li>${locationName}</li>
                 <li>${event.city}, ${event.state}</li>
-                <li><a href="${event.eventLink}">RSVP</a></li>
-                ${event.localStreamLink ? `<li><a href="${event.localStreamLink}">Stream</a></li>` : ''}
+                <li class="link-button"><a href="${event.eventLink}">RSVP</a></li>
+                ${event.localStreamLink ? `<li class="link-button"><a href="${event.localStreamLink}">Stream</a></li>` : ''}
             </ul>
         </div>`
 }

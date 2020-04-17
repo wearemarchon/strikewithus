@@ -75,11 +75,15 @@ h4 {
 }
 .event-card .link-button {
     width: 100px;
-    margin: 10px
+    margin: 10px;
+    border: 0.5px solid var(--light-purple);
+}
 
+.map-popup .link-button {
+    background-color: var(--purple);
+    margin-bottom: 3px;
 }
 .link-button {
-    border: 0.5px solid var(--light-purple);
     text-align: center;
     border-radius: 5px;
     cursor: pointer;
