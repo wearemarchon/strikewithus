@@ -68,10 +68,27 @@ h4 {
     color: white;
     padding: 10px;
     border-bottom: 0.5px solid var(--light-purple);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+}
+.event-card .link-button {
+    width: 100px;
+    margin: 10px
+
+}
+.link-button {
+    border: 0.5px solid var(--light-purple);
+    text-align: center;
+    border-radius: 5px;
+    cursor: pointer;
+    box-sizing: border-box;
 }
 
-.link-button {
-    
+.link-button a {
+    text-decoration: none;
+    color: white;
 }
 .usa-icon {
     width: 20px;
