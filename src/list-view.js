@@ -15,7 +15,7 @@ let renderAllEvents = () => {
 }
 
 let makeCard = (event) => {
-    let formattedDate = formatDataTime(event);
+    let formattedDate = formatDataTime(event.timestamp);
     return `
     <div class="event-card">
         <div>
