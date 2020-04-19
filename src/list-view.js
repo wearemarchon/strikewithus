@@ -27,8 +27,8 @@ let makeCard = (event) => {
         </ul>
         </div>
         <div class="button-container">
-          <div class="link-button"><a href="${event.eventLink}">RSVP</a></div>
-            ${event.localStreamLink ? `<div class="link-button"><a href="${event.localStreamLink}">Stream</a></div>` : ''}
+          <div class="link-button peach-gradient"><a href="${event.eventLink}">RSVP</a></div>
+            ${event.localStreamLink ? `<div class="link-button green-gradient"><a href="${event.localStreamLink}">Stream</a></div>` : ''}
         </div>
        
     </div>`
