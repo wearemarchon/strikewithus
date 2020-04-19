@@ -5,6 +5,8 @@ from typing import Dict
 import urllib3
 http = urllib3.PoolManager()
 
+from urllib.parse import urlparse
+
 from dateutil import parser
 from datetime import datetime, timedelta
 
@@ -82,7 +84,11 @@ def make_id(event: Dict) -> str:
     event_id = event_id + 1
     return event_id
 
-
+def parse_local_stream_link(stream_url: str) -> str:
+    parse_stream_url = urlparse(stream_url)
+    if parse_stream_url.scheme and parse_stream_url.netloc:
+        return stream_url
+    return ''
 
 def convert_event(event: Dict) -> Dict:
     """Builds the JSON object used by the client to render information in the map.
@@ -100,7 +106,7 @@ def convert_event(event: Dict) -> Dict:
         'eventDate': parser.parse(event.get('start_date', '4/22/2020')).strftime('%-m/%-d/%Y'),
         'timestamp': event.get('start_date', '2020-04-22T00:00:00Z"'),
         'eventLink': event.get('browser_url', ''),
-        'localStreamLink': parse_location_data(event, 'venue'),
+        'localStreamLink': parse_local_stream_link(parse_location_data(event, 'venue')),
         'location': make_location(event),
         'state': parse_location_data(event, 'region'),
         'city': parse_location_data(event, 'locality'),
