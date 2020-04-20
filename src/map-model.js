@@ -178,12 +178,12 @@ MainMap.prototype.init = function () {
         map.on('click', 'event-pins', function (e) {
             if (e.features.length > 0) {
                 var coordinates = e.features[0].geometry.coordinates.slice();
-                let event = e.features[0].properties;
-                renderList([event])
+                var feature = e.features[0];
+                updateListSelection(`${feature.id}-card`)
                 hideInsets();
                 map.flyTo({
                     center: coordinates,
-                    zoom: 14
+                    // zoom: 14
                 });
             }
         });

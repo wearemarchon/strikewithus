@@ -73,6 +73,13 @@ h4 {
     align-items: center;
 
 }
+
+.event-card.active {
+    background-color: var(--dark-purple);
+}
+.event-card.active h4 {
+    color: rgba(244, 125, 80, 1);
+}
 .event-card .link-button {
     width: 100px;
     margin: 10px;

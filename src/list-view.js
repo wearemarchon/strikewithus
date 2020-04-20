@@ -5,7 +5,9 @@ fetch('https://usclimatestrike.s3.amazonaws.com/events.json')
     })
     .then((data) => {
         allEvents = data.features.map((feature) => {
-            return feature.properties;
+            const event = feature.properties;
+            event.id = feature.id
+            return event;
         })
         renderAllEvents();
     });
@@ -14,10 +16,23 @@ let renderAllEvents = () => {
     renderList(allEvents);
 }
 
+let updateListSelection = (liID) =>{
+    Array.from(document.getElementsByClassName('event-card')).forEach(function (ele) {
+        ele.classList.remove('active');
+    })
+
+    let targetLi = document.getElementById(liID);
+    targetLi.classList.add('active');
+    targetLi.scrollIntoView({
+        // behavior: 'smooth', // when the list is long this animation is too long
+        block: 'center' 
+    });
+};
+
 let makeCard = (event) => {
     let formattedDate = formatDataTime(event);
     return `
-    <div class="event-card">
+    <div class="event-card" id="${event.id}-card">
         <div>
         <h4>${event.name}</h4>
         <ul class="unstyled-list">
