@@ -117,8 +117,6 @@ function markerHtml(e){
                 <li>${formattedDate}</li>
                 <li>${locationName}</li>
                 <li>${event.city}, ${event.state}</li>
-                <li class="link-button"><a href="${event.eventLink}">RSVP</a></li>
-                ${event.localStreamLink ? `<li class="link-button"><a href="${event.localStreamLink}">Stream</a></li>` : ''}
             </ul>
         </div>`
 }
