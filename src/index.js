@@ -18,6 +18,7 @@ function showInsets() {
 }
 
 function setDay() {
+
     allMaps.forEach(function(thisMap) {
         if (thisMap.setTypeFilters) {
             thisMap.setTypeFilters();
@@ -77,31 +78,22 @@ function toggleFilter(type, ele) {
 }
 
 function markerHtml(e){
-    var coordinates = e.features[0].geometry.coordinates.slice();
-    var name = e.features[0].properties.name;
-    var link = e.features[0].properties.eventLink+'';
-    var location = e.features[0].properties.location;
-    var dateString = e.features[0].properties.timestamp;
-    var date = new Date(dateString);
+    var event = e.features[0].properties;
+    var name = event.name;
+    var location = event.location;
 
-    var timeDelimiter = dateString.indexOf('T') + 1;
-    var hours = parseInt(dateString.substring(timeDelimiter, timeDelimiter + 2));
-    var mins = dateString.substring(timeDelimiter + 3, timeDelimiter + 5);
-
-    var ampm = hours >= 12 && hours !== 0 ? 'PM' : 'AM';
-    if(hours > 12) {
-        hours -= 12;
-    }
-    if(hours === 0){
-        hours = 12;
-    }
     var split = location.split(',');
     var locationName = split[0].trim();
-    var locationAddress = split.slice(1, split.length - 2).join(',').trim();
-    var locationState = split.slice(split.length - 2, split.length).join(',').trim();
+    var formattedDate = formatDataTime(event.timestamp);
 
-    var formattedDate = date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'}) + ' ' + hours +':'+ mins+ ' '+ampm;
-    return '<a target="_blank" href='+link+(referrer ? "?source="+referrer+"&referrer="+referrer : "" )+'><strong>'+name.toUpperCase()+'</strong></a><br><i>'+formattedDate+'</i><br>'+locationName+'<br>'+locationAddress+'<br>'+locationState;
+    return `<div class="map-popup">
+        <h4>${name.toUpperCase()}</h4>
+            <ul class="unstyled-list">
+                <li>${formattedDate}</li>
+                <li>${locationName}</li>
+                <li>${event.city}, ${event.state}</li>
+            </ul>
+        </div>`
 }
 
 var numDone = 0;
