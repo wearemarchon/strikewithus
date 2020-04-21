@@ -30,7 +30,7 @@ let updateListSelection = (liID) =>{
 };
 
 let makeCard = (event) => {
-    let formattedDate = formatDataTime(event);
+    let formattedDate = formatDataTime(event.timestamp);
     return `
     <div class="event-card" id="${event.id}-card">
         <div>

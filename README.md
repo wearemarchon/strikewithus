@@ -8,3 +8,9 @@ $ source setup-env.sh
 $ python3 -m lambda.test_lambda
 ```
 
+
+## To run the tests, you need to have node installed, then run:
+
+```
+node src/helpersSpec.js
+```

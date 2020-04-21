@@ -77,39 +77,14 @@ function toggleFilter(type, ele) {
     })
 }
 
-function formatDataTime(event) {
-        var dateString = event.timestamp;
-        var date = new Date(dateString);
-
-        var timeDelimiter = dateString.indexOf('T') + 1;
-        var hours = parseInt(dateString.substring(timeDelimiter, timeDelimiter + 2));
-        var mins = dateString.substring(timeDelimiter + 3, timeDelimiter + 5);
-
-        var ampm = hours >= 12 && hours !== 0 ? 'PM' : 'AM';
-        if (hours > 12) {
-            hours -= 12;
-        }
-        if (hours === 0) {
-            hours = 12;
-        }
-
-        var formattedDate = date.toLocaleDateString('en-US', {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        }) + ' ' + hours + ':' + mins + ' ' + ampm;
-        return formattedDate;
-}
-
 function markerHtml(e){
     var event = e.features[0].properties;
     var name = event.name;
     var location = event.location;
- 
+
     var split = location.split(',');
     var locationName = split[0].trim();
-    var formattedDate = formatDataTime(event);
+    var formattedDate = formatDataTime(event.timestamp);
 
     return `<div class="map-popup">
         <h4>${name.toUpperCase()}</h4>
