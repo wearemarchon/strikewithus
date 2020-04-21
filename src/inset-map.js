@@ -5,6 +5,10 @@ function InsetMap(state, id, bounds, mainMap) {
     this.mainMap = mainMap;
 }
 
+InsetMap.prototype.resize = function () {
+    this.map.resize();
+}
+
 InsetMap.prototype.resetBounds = function () {
      this.map.fitBounds(this.bounds);
 };
@@ -48,6 +52,8 @@ InsetMap.prototype.init = function () {
         scrollZoom: false,
         style: styleUrl,
     });
+
+    window.addEventListener('resize', this.resize)
 
     this.map.fitBounds(this.bounds, {
         easeTo: {
