@@ -8,6 +8,35 @@
     --cyan: #69c6b0;
     --background: --dark-purple;
 }
+
+/* util-classes */
+.unstyled-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.hidden {
+    display: none;
+}
+
+.multi-gradient {
+    background: linear-gradient(90deg, rgba(136, 198, 86, 1) 0%, rgba(203, 219, 42, 1) 20%, rgba(248, 210, 51, 1) 50%, rgba(244, 125, 80, 1) 80%, rgba(242, 97, 70, 1) 100%);
+}
+
+.peach-gradient {
+    background: linear-gradient(90deg, rgba(242, 97, 70, 1) 0%, rgba(251, 114, 44, 1) 35%, rgba(246, 91, 90, 1) 65%, rgba(248, 83, 113, 1) 100%);
+}
+
+.green-gradient {
+    background: linear-gradient(90deg, rgba(136, 198, 86, 1) 0%, rgba(195, 180, 73, 1) 35%, rgba(149, 196, 80, 1) 65%, rgba(136, 198, 86, 1) 100%);
+}
+
+.pink-gradient {
+    background: linear-gradient(90deg, rgba(236, 104, 141, 1) 0%, rgba(230, 113, 164, 1) 35%, rgba(204, 120, 177, 1) 65%, rgba(236, 104, 141, 1) 100%);
+}
+/* end util classes */
+
 body { margin: 0; padding: 0; background-color: var(--dark-purple);}
 html, body { height: 100%; width: 100%;}
 body {
@@ -34,33 +63,68 @@ h4 {
     font-weight: 100;
     font-size: 20px;
 }
+
 .main {
     display: flex;
     flex-flow: row;
     height: 100vh;
-    width: 100vw;
+    width: 100%;
+    align-items: stretch;
 }
 
-.unstyled-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+.sidebar {
+    flex: 0 0 400px;
+    overflow: scroll;
+    height: 100vh;
 }
 
 .map-container {
     display: flex;
-    flex-flow: column;
+    flex-flow: column wrap;
     height: 100vh;
-    flex: 1 1 70%;
-}
-#map {
-    height: 100%;
+    flex: 1 1 auto;
 }
 
-.sidebar {
-    flex: 1 1 30%;
-    max-width: 30%;
-    overflow-x: hidden;
+#map {
+    flex: 2;
+}
+
+.filter-bar {
+    display: flex;
+    flex-flow: row wrap;
+    background: var(--dark-purple);
+    justify-content: space-evenly;
+    color: white;
+    box-sizing: border-box;
+    align-items: center ;
+    flex: 0;
+}
+
+.filter-bar .filter-item {
+    flex: 1;
+    text-align: center;
+    padding: 20px 0;
+    margin-right: 12px
+}
+
+.filter-bar .date-button:last-of-type {
+    border-right: none;
+}
+
+.filter-bar .date-button:first-of-type {
+    border-left: 0.5px solid var(--light-purple);
+}
+
+.filter-bar .date-button {
+    cursor: pointer;
+    border-right: 0.5px solid var(--light-purple);
+    border-top: 6px solid var(--dark-purple);
+    border-bottom: 6px solid var(--dark-purple);
+}
+
+.filter-bar .date-button.active {
+    border-right-color: var(--dark-purple);
+    border-left-color: var(--dark-purple);
 }
 
 .event-card {
@@ -111,22 +175,6 @@ h4 {
     display: inline-block;
 }
 
-.hidden {
-    display: none;
-}
-.multi-gradient {
-    background: linear-gradient(90deg, rgba(136,198,86,1) 0%, rgba(203,219,42,1) 20%, rgba(248,210,51,1) 50%,  rgba(244,125,80,1) 80%, rgba(242,97,70,1) 100%);
-}
-.peach-gradient {
-    background: linear-gradient(90deg, rgba(242,97,70,1) 0%, rgba(251,114,44,1) 35%, rgba(246,91,90,1) 65%, rgba(248,83,113,1) 100%);
-}
-.green-gradient {
-    background: linear-gradient(90deg, rgba(136,198,86,1) 0%, rgba(195,180,73,1) 35%, rgba(149,196,80,1) 65%, rgba(136,198,86,1) 100%);
-}
-.pink-gradient {
-    background: linear-gradient(90deg, rgba(236,104,141,1) 0%, rgba(230,113,164,1) 35%, rgba(204,120,177,1) 65%, rgba(236,104,141,1) 100%);
-}
-
 .multi-button {
     color:white;
     background: transparent;
@@ -148,17 +196,18 @@ h4 {
 .multi-button.active {
     color: white;
     background: linear-gradient(90deg, rgba(136, 198, 86, 1) 0%, rgba(203, 219, 42, 1) 20%, rgba(248, 210, 51, 1) 50%, rgba(244, 125, 80, 1) 80%, rgba(242, 97, 70, 1) 100%);
-
 }
 
 .peach-button.active {
     background: linear-gradient(90deg, rgba(242, 97, 70, 1) 0%, rgba(251, 114, 44, 1) 35%, rgba(246, 91, 90, 1) 65%, rgba(248, 83, 113, 1) 100%);
     color: white;
 }
+
 .green-button.active {
     background: linear-gradient(90deg, rgba(136, 198, 86, 1) 0%, rgba(195, 180, 73, 1) 35%, rgba(149, 196, 80, 1) 65%, rgba(136, 198, 86, 1) 100%);
     color: white;
 }
+
 .pink-button.active {
     background: linear-gradient(90deg, rgba(236, 104, 141, 1) 0%, rgba(230, 113, 164, 1) 35%, rgba(204, 120, 177, 1) 65%, rgba(236, 104, 141, 1) 100%);
     color: white;
@@ -209,7 +258,6 @@ h4 {
 
 .filters label.active::before {
     background-color: #000000;
-
 }
 
 .map-overlay {
@@ -240,49 +288,20 @@ h4 {
     z-index: 3000;
 }
 
-.filter-bar {
-    display: flex;
-    background: var(--dark-purple);
-    justify-content: space-evenly;
-    color: white;
-    box-sizing: border-box;
-}
-
-/* .filter-bar a:hover:not(.active) {
-    background-color: #555;
-    color: white;
-} */
-
-.filter-bar .filter-item {
-    width: 100%;
-    text-align: center;
-    padding: 20px 0;
-    margin-right: 6px
-}
-
-.filter-bar .date-button:last-of-type {
-    border-right: none;
-}
-
-.filter-bar .date-button:first-of-type {
-    border-left: 0.5px solid var(--light-purple);
-}
-
-.filter-bar .date-button {
-    cursor: pointer;
-    border-right: 0.5px solid var(--light-purple);
-    border-top: 6px solid var(--dark-purple);
-    border-bottom: 6px solid var(--dark-purple);
-}
-
-.filter-bar .date-button.active {
-    border-right-color: var(--dark-purple);
-    border-left-color: var(--dark-purple);
-}
 
 @media screen and (max-width: 700px) {
-    div.content {
-        height: 92%!important;
-        margin-left: 0;
+    .main {
+        flex-flow: column;
     }
+    .map-container {
+        height: 60vh;
+    }
+    .sidebar {
+        width: 100%;
+        flex: 1 1 100%;
+    }
+    .inset {
+        height: 80px;
+    }
+
 }
