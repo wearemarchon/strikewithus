@@ -97,9 +97,9 @@ let getEvents = (searchedLocation) => {
     return filteredForDay.filter((event) => {
         let stateName = ABR_TO_NAME[event.state];
         if (searchedLocation.city) {
-            return event.city === searchedLocation.city && stateName === searchedLocation.state;
+            return event.city.toLowerCase() === searchedLocation.city.toLowerCase() && stateName.toLowerCase() === searchedLocation.state.toLowerCase();
         }
-        return searchedLocation.state === stateName;
+        return searchedLocation.state.toLowerCase() === stateName.toLowerCase();
     })
 }
 
@@ -107,6 +107,9 @@ let renderList = (events) => {
     let listView = document.getElementById('list-view');
     let cards = makeList(events);
     listView.innerHTML = '';
+    if (!events.length) {
+        return listView.innerHTML = '<div class="no-events-response">There are no events within your search location, try different location or expand your search area.</div>'
+    }
     listView.innerHTML = cards.join('');
 }
 
