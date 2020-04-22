@@ -108,7 +108,6 @@ let renderList = (events) => {
     let cards = makeList(events);
     listView.innerHTML = '';
     if (!events.length) {
-        console.log('no events')
         return listView.innerHTML = '<div class="no-events-response">There are no events within your search location, try different location or expand your search area.</div>'
     }
     listView.innerHTML = cards.join('');
