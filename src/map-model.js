@@ -158,7 +158,12 @@ MainMap.prototype.init = function () {
                 searchLocation.state = result.text;
             } else if (type === 'place') {
                 searchLocation.city = result.text;
-                searchLocation.state = STATE_NAMES.find((stateName) => result.place_name.includes(stateName))
+                // making sure it doesnt return washington as the state
+                if (result.place_name.includes('District of Columbia')) {
+                    searchLocation.state = 'District of Columbia';
+                } else {
+                    searchLocation.state = STATE_NAMES.find((stateName) => result.place_name.includes(stateName))
+                }
             } else if (type === 'postcode') {
                 searchLocation.city = result.place_name.split(',')[0];
                 searchLocation.state = STATE_NAMES.find((stateName) => result.place_name.includes(stateName))

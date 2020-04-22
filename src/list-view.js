@@ -97,9 +97,9 @@ let getEvents = (searchedLocation) => {
     return filteredForDay.filter((event) => {
         let stateName = ABR_TO_NAME[event.state];
         if (searchedLocation.city) {
-            return event.city === searchedLocation.city && stateName === searchedLocation.state;
+            return event.city.toLowerCase() === searchedLocation.city.toLowerCase() && stateName.toLowerCase() === searchedLocation.state.toLowercase();
         }
-        return searchedLocation.state === stateName;
+        return searchedLocation.state.toLowerCase() === stateName.toLowerCase();
     })
 }
 
