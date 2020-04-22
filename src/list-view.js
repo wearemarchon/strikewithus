@@ -6,7 +6,14 @@ fetch('https://usclimatestrike.s3.amazonaws.com/events.json')
     .then((data) => {
         allEvents = data.features.map((feature) => {
             const event = feature.properties;
-            event.id = feature.id
+            const locationArray = event.location.split(',');
+            if (locationArray[0].includes('http')) {
+                if (!event.localStreamLink) {
+                    event.localStreamLink = locationArray[0]
+                }
+                event.location = locationArray.slice(1).join(',')
+            }
+            event.id = feature.id;
             return event;
         })
         renderAllEvents();

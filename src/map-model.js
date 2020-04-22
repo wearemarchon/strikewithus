@@ -1,10 +1,25 @@
+
+const mapPadding = {
+    top: 40,
+    bottom: 150,
+    right: 0,
+    left: 0,
+}
+
+const mobileMapPadding = { 
+    top: 40,
+    bottom: 40,
+    right: 0,
+    left: 0,
+}
+
 function MainMap(id, bounds) {
     this.mapId = id;
     this.bounds = bounds;
     this.hoveredPopup = null;
 }
 
-MainMap.prototype.resetBounds = function (colors) {
+MainMap.prototype.resetBounds = function () {
     this.resetView();
 }
 
@@ -82,23 +97,28 @@ MainMap.prototype.addPointsLayer = function () {
     MainMap.initFilters();
 }
 
+MainMap.prototype.resize = function () {
+    this.mapPadding = window.innerWidth < 700 ? mobileMapPadding : mapPadding;
+    this.map.fitBounds(this.bounds, {
+        duration: 1000,
+        padding: this.mapPadding,
+    });
+    this.map.resize();
+}
+
 MainMap.prototype.resetView = function() {
     showInsets();
     let events = getEventsForDateMem();
     renderList(events);
     this.map.fitBounds(this.bounds, {
         duration: 1000,
-        padding: {
-            top: 20,
-            bottom: 150,
-            right: 0,
-            left: 0,
-        },
+        padding: this.mapPadding,
     });
 }
 
 MainMap.prototype.init = function () {
     var me = this;
+
     var map = window.map = new mapboxgl.Map({
         container: this.mapId,
         center: [-100.486052, 37.830348],
@@ -107,6 +127,13 @@ MainMap.prototype.init = function () {
         // interactive: false
     });
     this.map = map;
+
+    window.addEventListener('resize', () => {
+        me.resize()
+    });
+
+    this.mapPadding = window.innerWidth < 700 ? mobileMapPadding : mapPadding;
+
     map.addControl(new mapboxgl.NavigationControl());
 
     map.addControl(
@@ -152,12 +179,7 @@ MainMap.prototype.init = function () {
         new mapboxgl.LngLat(-64.920107, 50.095843)
     ), {
         animate: false,
-        padding: {
-            top: 20,
-            bottom: 150,
-            right: 0,
-            left: 0,
-        },
+        padding: this.mapPadding,
     });
 
     this.makeZoomToNationalButton();
